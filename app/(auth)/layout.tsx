@@ -7,7 +7,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <header className="flex w-full items-center px-8 py-6">
         <Link href="/" className="flex items-center">
           <Image
-            src="/logo/placeholder-logo.png"
+            src="/logo/logo.png"
             alt="ADU Portal"
             width={40}
             height={40}

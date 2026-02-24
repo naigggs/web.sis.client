@@ -10,4 +10,10 @@ export interface LoginData {
   user: UserResponse
 }
 
+export interface LogoutData {
+  
+}
+
 export type LoginResponse = ApiResponse<LoginData>
+export type RefreshResponse = ApiResponse<LoginData>
+export type LogoutResponse = ApiResponse<LogoutData>

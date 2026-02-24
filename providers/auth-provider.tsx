@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
+
 import { AuthContext } from "@/contexts/auth-context"
 import { loginApi } from "@/api/auth/login-api"
 import { logoutApi } from "@/api/auth/logout-api"
@@ -9,9 +10,7 @@ import { refreshApi } from "@/api/auth/refresh-api"
 import { LoginRequest } from "@/data/interface/auth"
 import { UserResponse } from "@/data/interface/user"
 
-/** One-year max-age; SameSite=Lax so it's sent on top-level navigations. */
 const SESSION_COOKIE = "auth_session"
-const PHONE_VERIFIED_COOKIE = "phone_verified"
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 365
 
 function setSessionCookie() {
@@ -22,12 +21,21 @@ function clearSessionCookie() {
   document.cookie = `${SESSION_COOKIE}=; path=/; max-age=0; SameSite=Lax`
 }
 
-function setPhoneVerifiedCookie() {
-  document.cookie = `${PHONE_VERIFIED_COOKIE}=1; path=/; max-age=${COOKIE_MAX_AGE}; SameSite=Lax`
+function persistUser(user: UserResponse) {
+  localStorage.setItem("user", JSON.stringify(user))
 }
 
-function clearPhoneVerifiedCookie() {
-  document.cookie = `${PHONE_VERIFIED_COOKIE}=; path=/; max-age=0; SameSite=Lax`
+function clearUser() {
+  localStorage.removeItem("user")
+}
+
+function getStoredUser(): UserResponse | null {
+  try {
+    const raw = localStorage.getItem("user")
+    return raw ? (JSON.parse(raw) as UserResponse) : null
+  } catch {
+    return null
+  }
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -42,36 +50,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error("Logout failed", error)
     } finally {
       setUser(null)
-      localStorage.removeItem("user")
+      clearUser()
       clearSessionCookie()
-      clearPhoneVerifiedCookie()
       router.push("/login")
     }
   }, [router])
 
-  const handleSignIn = async (creds: LoginRequest, remember?: boolean) => {
-    try {
-      const data = await loginApi(creds)
-      setUser(data.data.user)
-      localStorage.setItem("user", JSON.stringify(data.data.user))
-      setSessionCookie()
-      if (data.data.user.isPhoneVerified) setPhoneVerifiedCookie()
-      else clearPhoneVerifiedCookie()
-      return true
-    } catch (error) {
-      console.error("Login failed", error)
-      throw error
-    }
+  const handleSignIn = async (creds: LoginRequest): Promise<boolean> => {
+    const data = await loginApi(creds)
+    const loggedInUser = data.data?.user
+    if (!loggedInUser) throw new Error(data.message ?? "Login failed")
+    setUser(loggedInUser)
+    persistUser(loggedInUser)
+    setSessionCookie()
+    return true
   }
 
-  const handleRefresh = React.useCallback(async () => {
+  const handleRefresh = React.useCallback(async (): Promise<boolean> => {
     try {
       const data = await refreshApi()
-      setUser(data.data.user)
-      localStorage.setItem("user", JSON.stringify(data.data.user))
+      const refreshedUser = data.data?.user
+      if (!refreshedUser) throw new Error("No user in refresh response")
+      setUser(refreshedUser)
+      persistUser(refreshedUser)
       setSessionCookie()
-      if (data.data.user.isPhoneVerified) setPhoneVerifiedCookie()
-      else clearPhoneVerifiedCookie()
       return true
     } catch (error) {
       console.error("Refresh failed", error)
@@ -80,85 +82,60 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [handleSignOut])
 
+  // On mount: rehydrate from localStorage, then validate session with the server
   React.useEffect(() => {
     const initAuth = async () => {
       try {
-        const storedUser = localStorage.getItem("user")
-        if (storedUser) {
-          const parsedUser = JSON.parse(storedUser)
-          setUser(parsedUser)
-          try {
-            const data = await refreshApi()
-            setUser(data.data.user)
-            localStorage.setItem("user", JSON.stringify(data.data.user))
-          } catch (error) {
-            console.error("Session validation failed", error)
-            await handleSignOut()
-          }
-        }
+        const stored = getStoredUser()
+        if (!stored) return
+        setUser(stored)
+        await handleRefresh()
       } catch (error) {
-        console.error("Auth initialization error", error)
+        console.error("Auth init error", error)
       } finally {
         setIsLoading(false)
       }
     }
-
     initAuth()
-  }, [handleSignOut])
+  }, [handleRefresh])
 
+  // Global 401 interceptor — silently refreshes once, then retries
   React.useEffect(() => {
     if (typeof window === "undefined") return
 
     const originalFetch = window.fetch.bind(window)
     let refreshingPromise: Promise<boolean> | null = null
 
-    window.fetch = async (...args: Parameters<typeof fetch>) => {
-      try {
-        let res = await originalFetch(...args)
+    window.fetch = async (...args: Parameters<typeof fetch>): Promise<Response> => {
+      const url =
+        typeof args[0] === "string"
+          ? args[0]
+          : args[0] instanceof URL
+            ? args[0].href
+            : (args[0] as Request).url
 
-        if (res.status !== 401) return res
+      // Never intercept the refresh endpoint itself, or when no session exists
+      const isRefreshUrl = url.includes("/auth/refresh")
+      const hasSession = !!localStorage.getItem("user")
 
-        if (!refreshingPromise) {
-          refreshingPromise = (async () => {
-            try {
-              const ok = await handleRefresh()
-              return !!ok
-            } catch (e) {
-              return false
-            } finally {
-              refreshingPromise = null
-            }
-          })()
-        }
+      const res = await originalFetch(...args)
 
-        const refreshed = await refreshingPromise
-        if (!refreshed) {
-          return res
-        }
-        return await originalFetch(...args)
-      } catch (err) {
-        return originalFetch(...args)
+      if (res.status !== 401 || isRefreshUrl || !hasSession) return res
+
+      if (!refreshingPromise) {
+        refreshingPromise = handleRefresh().finally(() => {
+          refreshingPromise = null
+        })
       }
+
+      const refreshed = await refreshingPromise
+      return refreshed ? originalFetch(...args) : res
     }
 
     return () => {
-      try {
-        window.fetch = originalFetch
-      } catch (e) {}
+      window.fetch = originalFetch
     }
   }, [handleRefresh])
-
-  const handleVerifyPhone = React.useCallback(() => {
-    setPhoneVerifiedCookie()
-    setUser((prev) => (prev ? { ...prev, isPhoneVerified: true } : prev))
-    const stored = localStorage.getItem("user")
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored)
-        localStorage.setItem("user", JSON.stringify({ ...parsed, isPhoneVerified: true }))
-      } catch {}
-    }
-  }, [])
 
   return (
     <AuthContext.Provider
@@ -168,10 +145,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signIn: handleSignIn,
         signOut: handleSignOut,
         refresh: handleRefresh,
-        verifyPhone: handleVerifyPhone,
       }}
     >
       {children}
     </AuthContext.Provider>
   )
 }
+
+
