@@ -7,15 +7,15 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <header className="flex w-full items-center px-8 py-6">
         <Link href="/" className="flex items-center">
           <Image
-            src="/logo/logo-aduportal.png"
+            src="/logo/placeholder-logo.png"
             alt="ADU Portal"
             width={40}
             height={40}
-            className="size-16 rounded-full object-contain"
+            className="size-9 rounded-full object-contain mr-2"
           />
           <div className="flex flex-col">
-            <span className="text-xl font-semibold">Portal</span>
-            <p className="text-muted-foreground -mt-1 text-xs">Accessory Dwelling Unit</p>
+            <span className="text-xl font-semibold">SIS Portal</span>
+            <p className="text-muted-foreground -mt-1 text-xs">School Information System</p>
           </div>
         </Link>
       </header>

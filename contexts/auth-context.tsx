@@ -11,7 +11,6 @@ export type AuthContextType = {
   signIn: (creds: LoginRequest) => Promise<boolean>
   signOut: () => Promise<void>
   refresh: () => Promise<boolean>
-  verifyPhone: () => void
 }
 
 export const AuthContext = React.createContext<AuthContextType | undefined>(undefined)
