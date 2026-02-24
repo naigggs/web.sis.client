@@ -18,84 +18,84 @@ export const data = {
   navMain: [
     {
       title: "Students",
-      url: "/dashboard/students",
+      url: "/students",
       icon: GraduationCap,
       isActive: true,
       items: [
         {
           title: "All Students",
-          url: "/dashboard/students",
+          url: "/students",
         },
         {
           title: "Add Student",
-          url: "/dashboard/students/new",
+          url: "/students/new",
         },
       ],
     },
     {
       title: "Courses",
-      url: "/dashboard/courses",
+      url: "/courses",
       icon: BookOpen,
       items: [
         {
           title: "All Courses",
-          url: "/dashboard/courses",
+          url: "/courses",
         },
         {
           title: "Add Course",
-          url: "/dashboard/courses/new",
+          url: "/courses/new",
         },
       ],
     },
     {
       title: "Subjects",
-      url: "/dashboard/subjects",
+      url: "/subjects",
       icon: Layers,
       items: [
         {
           title: "All Subjects",
-          url: "/dashboard/subjects",
+          url: "/subjects",
         },
         {
           title: "Add Subject",
-          url: "/dashboard/subjects/new",
+          url: "/subjects/new",
         },
         {
           title: "Prerequisites",
-          url: "/dashboard/subjects/prerequisites",
+          url: "/subjects/prerequisites",
         },
       ],
     },
     {
       title: "Reservations",
-      url: "/dashboard/reservations",
+      url: "/reservations",
       icon: CalendarCheck,
       items: [
         {
           title: "All Reservations",
-          url: "/dashboard/reservations",
+          url: "/reservations",
         },
       ],
     },
     {
       title: "Grading Sheet",
-      url: "/dashboard/grades",
+      url: "/grades",
       icon: FileSpreadsheet,
       items: [
         {
           title: "All Grades",
-          url: "/dashboard/grades",
+          url: "/grades",
         },
       ],
     },
     {
       title: "Settings",
-      url: "/dashboard/settings",
+      url: "/settings",
       icon: Settings2,
       items: [
         {
           title: "General",
-          url: "/dashboard/settings",
+          url: "/settings",
         },
       ],
     },
