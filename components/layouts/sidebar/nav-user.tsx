@@ -1,16 +1,13 @@
-"use client"
+"use client";
 
 import {
-  IconBell,
-  IconCreditCard,
-  IconDiscountCheck,
-  IconLogout,
-  IconSelector,
-  IconSparkles,
-} from "@tabler/icons-react"
-
-import { useSidebar } from "@/hooks/use-sidebar"
-import { useAuth } from "@/hooks/use-auth"
+  BadgeCheck,
+  Bell,
+  ChevronsUpDown,
+  CreditCard,
+  LogOut,
+  Sparkles,
+} from "lucide-react";
 
 import {
   Avatar,
@@ -26,21 +23,19 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui"
+} from "@/components/ui";
+import { useSidebar } from "@/hooks/use-sidebar";
 
-export function NavUser() {
-  const { isMobile } = useSidebar()
-  const { user, signOut } = useAuth()
-
-  const displayName = user
-    ? `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || user.email
-    : ""
-  const initials = displayName
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2)
+export function NavUser({
+  user,
+}: {
+  user: {
+    name: string;
+    email: string;
+    avatar: string;
+  };
+}) {
+  const { isMobile } = useSidebar();
 
   return (
     <SidebarMenu>
@@ -51,15 +46,15 @@ export function NavUser() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-full">
-                <AvatarImage src={undefined} alt={displayName} />
-                <AvatarFallback className="rounded-full">{initials}</AvatarFallback>
+              <Avatar className="h-8 w-8 rounded-lg">
+                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{displayName}</span>
-                <span className="truncate text-xs">{user?.email}</span>
+                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate text-xs">{user.email}</span>
               </div>
-              <IconSelector className="ml-auto size-4" />
+              <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -70,46 +65,46 @@ export function NavUser() {
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-full">
-                  <AvatarImage src={undefined} alt={displayName} />
-                  <AvatarFallback className="rounded-full">{initials}</AvatarFallback>
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{displayName}</span>
-                  <span className="truncate text-xs">{user?.email}</span>
+                  <span className="truncate font-medium">{user.name}</span>
+                  <span className="truncate text-xs">{user.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <IconSparkles />
+                <Sparkles />
                 Upgrade to Pro
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <IconDiscountCheck />
+                <BadgeCheck />
                 Account
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <IconCreditCard />
+                <CreditCard />
                 Billing
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <IconBell />
+                <Bell />
                 Notifications
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onSelect={() => signOut()}>
-              <IconLogout />
+            <DropdownMenuItem>
+              <LogOut />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }
