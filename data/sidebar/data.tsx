@@ -1,104 +1,101 @@
 import {
   BookOpen,
-  Bot,
-  Frame,
+  CalendarCheck,
+  FileSpreadsheet,
+  GraduationCap,
   LifeBuoy,
-  Map,
-  PieChart,
-  Send,
+  Layers,
   Settings2,
-  SquareTerminal,
+  Send,
 } from "lucide-react";
 
 export const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "Admin",
+    email: "admin@sis.edu",
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
     {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
+      title: "Students",
+      url: "/dashboard/students",
+      icon: GraduationCap,
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "All Students",
+          url: "/dashboard/students",
         },
         {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
+          title: "Add Student",
+          url: "/dashboard/students/new",
         },
       ],
     },
     {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
+      title: "Courses",
+      url: "/dashboard/courses",
       icon: BookOpen,
       items: [
         {
-          title: "Introduction",
-          url: "#",
+          title: "All Courses",
+          url: "/dashboard/courses",
         },
         {
-          title: "Get Started",
-          url: "#",
+          title: "Add Course",
+          url: "/dashboard/courses/new",
+        },
+      ],
+    },
+    {
+      title: "Subjects",
+      url: "/dashboard/subjects",
+      icon: Layers,
+      items: [
+        {
+          title: "All Subjects",
+          url: "/dashboard/subjects",
         },
         {
-          title: "Tutorials",
-          url: "#",
+          title: "Add Subject",
+          url: "/dashboard/subjects/new",
         },
         {
-          title: "Changelog",
-          url: "#",
+          title: "Prerequisites",
+          url: "/dashboard/subjects/prerequisites",
+        },
+      ],
+    },
+    {
+      title: "Reservations",
+      url: "/dashboard/reservations",
+      icon: CalendarCheck,
+      items: [
+        {
+          title: "All Reservations",
+          url: "/dashboard/reservations",
+        },
+      ],
+    },
+    {
+      title: "Grading Sheet",
+      url: "/dashboard/grades",
+      icon: FileSpreadsheet,
+      items: [
+        {
+          title: "All Grades",
+          url: "/dashboard/grades",
         },
       ],
     },
     {
       title: "Settings",
-      url: "#",
+      url: "/dashboard/settings",
       icon: Settings2,
       items: [
         {
           title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
+          url: "/dashboard/settings",
         },
       ],
     },
@@ -115,21 +112,5 @@ export const data = {
       icon: Send,
     },
   ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
+  projects: [],
 };
