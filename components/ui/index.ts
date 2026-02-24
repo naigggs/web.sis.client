@@ -172,80 +172,6 @@ export { CommandShortcut } from "./command/command-shortcut"
  */
 export { Spinner } from "./spinner/spinner"
 /**
- * Place Autocomplete
- */
-export { PlaceAutocomplete } from "./place-autocomplete/place-autocomplete"
-/**
- * Map
- */
-export { Map } from "./map/map"
-export { MapCircle } from "./map/map-circle"
-export { MapCircleMarker } from "./map/map-circle-marker"
-export { MapControlContainer } from "./map/map-control-container"
-export { MapDrawCircle } from "./map/map-draw-circle"
-export { MapDrawControl } from "./map/map-draw-control"
-export { MapDrawDelete } from "./map/map-draw-delete"
-export { MapDrawEdit } from "./map/map-draw-edit"
-export { MapDrawMarker } from "./map/map-draw-marker"
-export { MapDrawPolygon } from "./map/map-draw-polygon"
-export { MapDrawPolyline } from "./map/map-draw-polyline"
-export { MapDrawLine } from "./map/map-draw-line"
-export { MapDrawRectangle } from "./map/map-draw-rectangle"
-export { MapDrawUndo } from "./map/map-draw-undo"
-export { MapFeatureGroup } from "./map/map-feature-group"
-export { MapFullscreenControl } from "./map/map-fullscreen-control"
-export { MapLayerGroup } from "./map/map-layer-group"
-export { MapLayers } from "./map/map-layers"
-export { MapLayersControl } from "./map/map-layers-control"
-export { MapLocateControl } from "./map/map-locate-control"
-export { MapLocateButton } from "./map/map-locate-button"
-export { MapMarker } from "./map/map-marker"
-export { MapMarkerClusterGroup } from "./map/map-marker-cluster-group"
-export { MapPolygon } from "./map/map-polygon"
-export { MapPolyline } from "./map/map-polyline"
-export { MapPopup } from "./map/map-popup"
-export { MapRectangle } from "./map/map-rectangle"
-export { MapSearchControl } from "./map/map-search-control"
-export { MapTileLayer } from "./map/map-tile-layer"
-export { MapTooltip } from "./map/map-tooltip"
-export { MapZoomControl } from "./map/map-zoom-control"
-export { MapZoomButtons } from "./map/map-zoom-buttons"
-export { MapDrawMove } from "./map/map-draw-move"
-export { MapInfoControl } from "./map/map-info-control"
-export { MapFurnitureButton } from "./map/map-furniture-button"
-export { MapDropZone } from "./map/map-drop-zone"
-export { MapStampHandler } from "./map/map-stamp-handler"
-export { MapKeyboardShortcuts } from "./map/map-keyboard-shortcuts"
-export { MapLayerContextMenu } from "./map/map-layer-context-menu"
-export { MapLayerRightClickHandler } from "./map/map-layer-right-click-handler"
-export { MapLockHandler } from "./map/map-lock-handler"
-export { MapShowHandler } from "./map/map-show-handler"
-/**
- * Leaflet
- */
-export { createLazyComponent } from "./map/leaflet/create-lazy-component"
-export { LeafletCircle } from "./map/leaflet/leaflet-circle"
-export { LeafletGeoJSON } from "./map/leaflet/leaflet-geojson"
-export { LeafletCircleMarker } from "./map/leaflet/leaflet-circle-marker"
-export { LeafletFeatureGroup } from "./map/leaflet/leaflet-feature-group"
-export { LeafletLayerGroup } from "./map/leaflet/leaflet-layer-group"
-export { LeafletMapContainer } from "./map/leaflet/leaflet-map-container"
-export { LeafletMarker } from "./map/leaflet/leaflet-marker"
-export { LeafletMarkerClusterGroup } from "./map/leaflet/leaflet-marker-cluster-group"
-export { LeafletPolygon } from "./map/leaflet/leaflet-polygon"
-export { LeafletPolyline } from "./map/leaflet/leaflet-polyline"
-export { LeafletPopup } from "./map/leaflet/leaflet-popup"
-export { LeafletRectangle } from "./map/leaflet/leaflet-rectangle"
-export { LeafletTileLayer } from "./map/leaflet/leaflet-tile-layer"
-export { LeafletTooltip } from "./map/leaflet/leaflet-tooltip"
-/**
- * Backgroud
- */
-export { BackgroundLightRays } from "./background/background-light-rays"
-export { BackgroundDotPattern } from "./background/background-dot-pattern"
-export { BackgroundGridPattern } from "./background/background-grid-pattern"
-export { HugeiconsIcon } from "@hugeicons/react"
-/**
  * Text
  */
 export { TextAurora } from "./text/text-aurora"
@@ -355,14 +281,6 @@ export { AspectRatio } from "./aspect-ratio/aspect-ratio"
  */
 export { Calendar } from "./calendar/calendar"
 export { CalendarDayButton } from "./calendar/calendar-day-button"
-/**
- * Carousel
- */
-export { Carousel } from "./carousel/carousel"
-export { CarouselContent } from "./carousel/carousel-content"
-export { CarouselItem } from "./carousel/carousel-item"
-export { CarouselPrevious } from "./carousel/carousel-previous"
-export { CarouselNext } from "./carousel/carousel-next"
 /**
  * Checkbox
  */
