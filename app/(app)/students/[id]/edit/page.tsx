@@ -5,7 +5,7 @@ import { IconArrowLeft } from "@tabler/icons-react";
 import Link from "next/link";
 
 import { useGetStudentById } from "@/hooks/api/student/use-get-student-by-id";
-import { EditStudentForm } from "@/components/pages/students/edit-student-form";
+import { EditStudentForm } from "@/components/pages/students/_form/edit-student-form";
 import { Skeleton } from "@/components/ui";
 
 export default function EditStudentPage() {

@@ -1,7 +1,7 @@
 import { IconArrowLeft } from "@tabler/icons-react";
 import Link from "next/link";
 
-import { CreateStudentForm } from "@/components/pages/students/create-student-form";
+import { CreateStudentForm } from "@/components/pages/students/_form/create-student-form";
 
 export default function CreateStudentPage() {
   return (
