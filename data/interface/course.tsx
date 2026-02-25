@@ -13,7 +13,7 @@ export interface CreateCourseRequest {
   description: string;
 }
 
-export interface UpdateCourseRequest {
+export interface PatcbCourseRequest {
   code?: string;
   name?: string;
   description?: string;

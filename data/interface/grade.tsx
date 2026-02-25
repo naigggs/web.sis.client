@@ -26,7 +26,7 @@ export interface CreateGradeRequest {
   finals: string;
 }
 
-export interface UpdateGradeRequest {
+export interface PatchGradeRequest {
   prelim?: string;
   midterm?: string;
   finals?: string;

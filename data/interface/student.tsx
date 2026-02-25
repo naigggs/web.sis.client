@@ -22,7 +22,7 @@ export interface CreateStudentRequest {
   courseId: string;
 }
 
-export interface UpdateStudentRequest {
+export interface PatchStudentRequest {
   studentNo?: string;
   firstName?: string;
   lastName?: string;

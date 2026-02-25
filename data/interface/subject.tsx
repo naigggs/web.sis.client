@@ -18,7 +18,7 @@ export interface CreateSubjectRequest {
   courseId: string;
 }
 
-export interface UpdateSubjectRequest {
+export interface PatchSubjectRequest {
   code?: string;
   title?: string;
   units?: number;
