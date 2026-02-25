@@ -53,3 +53,14 @@ export interface PatchStudentRequest {
 export interface ReserveSubjectRequest {
   subjectId: string;
 }
+
+export interface ImportStudentFailure {
+  row: number;
+  studentNo: string;
+  error: string;
+}
+
+export interface ImportStudentsResponse {
+  imported: number;
+  failed: ImportStudentFailure[];
+}

@@ -12,13 +12,22 @@ import {
   IconFilter,
   IconX,
   IconEye,
+  IconUpload,
+  IconDownload,
+  IconCircleCheck,
+  IconCircleX,
 } from "@tabler/icons-react";
 
 import { useGetStudents } from "@/hooks/api/student/use-get-students";
 import { useBulkDeleteStudents } from "@/hooks/api/student/use-bulk-delete-students";
 import { usePatchStudent } from "@/hooks/api/student/use-patch-student";
+import { useImportStudents } from "@/hooks/api/student/use-import-students";
+import { useExportStudents } from "@/hooks/api/student/use-export-students";
 import { useGetCourses } from "@/hooks/api/course/use-get-courses";
-import { StudentResponse } from "@/data/interface/student";
+import {
+  StudentResponse,
+  ImportStudentsResponse,
+} from "@/data/interface/student";
 import {
   Button,
   Input,
@@ -49,6 +58,11 @@ import {
   AlertDialogFooter,
   AlertDialogCancel,
   AlertDialogAction,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
 } from "@/components/ui";
 
 // ─── Debounce hook ────────────────────────────────────────────────────────────
@@ -92,6 +106,37 @@ export function StudentsSection() {
 
   // Inline editing
   const [inlineEdit, setInlineEdit] = React.useState<InlineEdit | null>(null);
+
+  // Import / Export
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const [importResult, setImportResult] =
+    React.useState<ImportStudentsResponse | null>(null);
+  const { mutate: importStudents, isPending: isImporting } =
+    useImportStudents();
+  const { mutate: exportStudents, isPending: isExporting } =
+    useExportStudents();
+
+  const handleImportFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    // Reset input so the same file can be re-selected
+    e.target.value = "";
+    importStudents(file, {
+      onSuccess: (result) => {
+        setImportResult(result);
+        if (result.failed.length === 0) {
+          toast.success(
+            `${result.imported} student${result.imported !== 1 ? "s" : ""} imported successfully`,
+          );
+        } else {
+          toast.warning(
+            `Imported ${result.imported}, ${result.failed.length} failed`,
+          );
+        }
+      },
+      onError: () => toast.error("Import failed"),
+    });
+  };
 
   // Data
   const { data, isLoading, isFetching } = useGetStudents({
@@ -212,10 +257,44 @@ export function StudentsSection() {
             operations.
           </p>
         </div>
-        <Button onClick={() => router.push("/students/create")}>
-          <IconPlus />
-          Add Student
-        </Button>
+        <div className="flex items-center gap-2">
+          {/* Hidden CSV file input */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".csv,text/csv"
+            className="hidden"
+            onChange={handleImportFile}
+          />
+          <Button
+            variant="outline"
+            onClick={() => exportStudents()}
+            disabled={isExporting}
+          >
+            {isExporting ? (
+              <IconLoader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <IconDownload />
+            )}
+            Export CSV
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isImporting}
+          >
+            {isImporting ? (
+              <IconLoader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <IconUpload />
+            )}
+            Import CSV
+          </Button>
+          <Button onClick={() => router.push("/students/create")}>
+            <IconPlus />
+            Add Student
+          </Button>
+        </div>
       </div>
 
       {/* ── Toolbar ── */}
@@ -590,6 +669,58 @@ export function StudentsSection() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* ── Import results ── */}
+      <Dialog
+        open={!!importResult}
+        onOpenChange={(open) => {
+          if (!open) setImportResult(null);
+        }}
+      >
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Import Results</DialogTitle>
+            <DialogDescription>
+              {importResult?.imported ?? 0} student
+              {(importResult?.imported ?? 0) !== 1 ? "s" : ""} imported
+              successfully
+              {(importResult?.failed.length ?? 0) > 0 &&
+                `, ${importResult!.failed.length} failed`}
+              .
+            </DialogDescription>
+          </DialogHeader>
+
+          {(importResult?.failed.length ?? 0) > 0 && (
+            <div className="flex flex-col gap-2 max-h-72 overflow-y-auto pr-1">
+              <p className="text-sm font-medium text-destructive">
+                Failed rows:
+              </p>
+              {importResult!.failed.map((f) => (
+                <div
+                  key={f.row}
+                  className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm"
+                >
+                  <IconCircleX className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
+                  <div className="flex flex-col gap-0.5">
+                    <span className="font-mono font-medium">
+                      Row {f.row}
+                      {f.studentNo ? ` — ${f.studentNo}` : ""}
+                    </span>
+                    <span className="text-muted-foreground">{f.error}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {importResult?.failed.length === 0 && (
+            <div className="flex items-center gap-2 rounded-lg border border-green-500/30 bg-green-500/5 px-3 py-2 text-sm text-green-700 dark:text-green-400">
+              <IconCircleCheck className="h-4 w-4 shrink-0" />
+              All rows imported without errors.
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
