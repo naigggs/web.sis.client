@@ -1,4 +1,5 @@
 import { API_URL } from "@/config/constants";
+import { ApiResponse } from "@/data/interface/api";
 import { StudentResponse } from "@/data/interface/student";
 
 export async function getStudentByIdApi(
@@ -8,6 +9,6 @@ export async function getStudentByIdApi(
     credentials: "include",
   });
   if (!res.ok) throw new Error("Get student failed");
-  const json = (await res.json()) as { data: StudentResponse };
-  return json.data;
+  const json: ApiResponse<{ student: StudentResponse }> = await res.json();
+  return json.data!.student;
 }

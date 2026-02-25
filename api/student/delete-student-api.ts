@@ -6,4 +6,5 @@ export async function deleteStudentApi(studentId: string): Promise<void> {
     credentials: "include",
   });
   if (!res.ok) throw new Error("Delete student failed");
+  // 204 No Content — nothing to parse
 }

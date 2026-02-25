@@ -1,3 +1,4 @@
+import { Pagination } from "./api";
 import { CourseResponse } from "./course";
 
 export interface StudentResponse {
@@ -11,6 +12,17 @@ export interface StudentResponse {
   createdAt: string;
   updatedAt: string;
   course: CourseResponse;
+}
+
+export interface GetStudentsParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+}
+
+export interface GetStudentsData {
+  students: StudentResponse[];
+  pagination: Pagination;
 }
 
 export interface CreateStudentRequest {
