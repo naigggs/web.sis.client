@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
   IconPlus,
@@ -35,8 +36,6 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui";
-import { CreateStudentDialog } from "./create-student-dialog";
-import { EditStudentDialog } from "./edit-student-dialog";
 
 // ─── Debounce hook ────────────────────────────────────────────────────────────
 function useDebounce<T>(value: T, delay = 400): T {
@@ -65,11 +64,9 @@ export function StudentsSection() {
   // Selection
   const [selectedIds, setSelectedIds] = React.useState<Set<string>>(new Set());
 
+  const router = useRouter();
+
   // Dialogs
-  const [createOpen, setCreateOpen] = React.useState(false);
-  const [editTarget, setEditTarget] = React.useState<StudentResponse | null>(
-    null,
-  );
   const [deleteTarget, setDeleteTarget] =
     React.useState<StudentResponse | null>(null);
   const [bulkDeleteOpen, setBulkDeleteOpen] = React.useState(false);
@@ -80,7 +77,7 @@ export function StudentsSection() {
   // Data
   const { data, isLoading, isFetching } = useGetStudents({
     page,
-    limit: 10,
+    limit: 20,
     search: debouncedSearch || undefined,
   });
   const students = data?.students ?? [];
@@ -191,7 +188,7 @@ export function StudentsSection() {
             operations.
           </p>
         </div>
-        <Button onClick={() => setCreateOpen(true)}>
+        <Button onClick={() => router.push("/students/create")}>
           <IconPlus />
           Add Student
         </Button>
@@ -380,7 +377,9 @@ export function StudentsSection() {
                         <Button
                           size="icon-sm"
                           variant="ghost"
-                          onClick={() => setEditTarget(student)}
+                          onClick={() =>
+                            router.push(`/students/${student.id}/edit`)
+                          }
                           aria-label="Edit student"
                         >
                           <IconPencil className="h-4 w-4" />
@@ -434,20 +433,6 @@ export function StudentsSection() {
             </Button>
           </div>
         </div>
-      )}
-
-      {/* ── Create dialog ── */}
-      <CreateStudentDialog open={createOpen} onOpenChange={setCreateOpen} />
-
-      {/* ── Edit dialog ── */}
-      {editTarget && (
-        <EditStudentDialog
-          student={editTarget}
-          open
-          onOpenChange={(open) => {
-            if (!open) setEditTarget(null);
-          }}
-        />
       )}
 
       {/* ── Single delete confirm ── */}
