@@ -11,6 +11,7 @@ import {
   IconLoader2,
   IconFilter,
   IconX,
+  IconEye,
 } from "@tabler/icons-react";
 
 import { useGetStudents } from "@/hooks/api/student/use-get-students";
@@ -374,7 +375,12 @@ export function StudentsSection() {
 
                     {/* Student No */}
                     <TableCell className="font-mono text-xs">
-                      {student.studentNo}
+                      <button
+                        className="hover:underline underline-offset-2 cursor-pointer text-foreground"
+                        onClick={() => router.push(`/students/${student.id}`)}
+                      >
+                        {student.studentNo}
+                      </button>
                     </TableCell>
 
                     {/* First Name — inline editable */}
@@ -461,6 +467,14 @@ export function StudentsSection() {
                     {/* Actions */}
                     <TableCell className="text-right pr-4">
                       <div className="flex items-center justify-end gap-1">
+                        <Button
+                          size="icon-sm"
+                          variant="ghost"
+                          onClick={() => router.push(`/students/${student.id}`)}
+                          aria-label="View student"
+                        >
+                          <IconEye className="h-4 w-4" />
+                        </Button>
                         <Button
                           size="icon-sm"
                           variant="ghost"

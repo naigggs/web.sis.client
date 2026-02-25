@@ -4,10 +4,10 @@ import { SubjectResponse } from "./subject";
 
 export interface GradeResponse {
   id: string;
-  prelim: number | null;
-  midterm: number | null;
-  finals: number | null;
-  finalGrade: number | null;
+  prelim: string | null;
+  midterm: string | null;
+  finals: string | null;
+  finalGrade: string | null;
   remarks: "PASSED" | "FAILED" | null;
   studentId: string;
   subjectId: string;

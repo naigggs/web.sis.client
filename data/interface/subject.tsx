@@ -12,6 +12,16 @@ export interface SubjectResponse {
   course: CourseResponse;
 }
 
+export interface SubjectStatusResponse {
+  id: string;
+  code: string;
+  title: string;
+  units: number;
+  eligible: boolean;
+  alreadyReserved: boolean;
+  missingPrerequisites: PrerequisiteResponse[];
+}
+
 export interface PrerequisiteResponse {
   id: string;
   subjectId: string;

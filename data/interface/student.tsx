@@ -1,5 +1,8 @@
 import { Pagination } from "./api";
 import { CourseResponse } from "./course";
+import { GradeResponse } from "./grade";
+import { ReservationResponse } from "./reservation";
+import { SubjectStatusResponse } from "./subject";
 
 export interface StudentResponse {
   id: string;
@@ -12,6 +15,9 @@ export interface StudentResponse {
   createdAt: string;
   updatedAt: string;
   course: CourseResponse;
+  grades: GradeResponse[];
+  reservations: ReservationResponse[];
+  subjectStatus: SubjectStatusResponse[];
 }
 
 export interface GetStudentsParams {
