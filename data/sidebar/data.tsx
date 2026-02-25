@@ -28,7 +28,7 @@ export const data = {
         },
         {
           title: "Add Student",
-          url: "/students/new",
+          url: "/students/create",
         },
       ],
     },
@@ -43,7 +43,7 @@ export const data = {
         },
         {
           title: "Add Course",
-          url: "/courses/new",
+          url: "/courses/create",
         },
       ],
     },
@@ -58,7 +58,7 @@ export const data = {
         },
         {
           title: "Add Subject",
-          url: "/subjects/new",
+          url: "/subjects/create",
         },
         {
           title: "Prerequisites",

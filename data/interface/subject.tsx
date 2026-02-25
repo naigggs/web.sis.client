@@ -52,3 +52,12 @@ export interface PatchSubjectRequest {
 export interface AddPrerequisiteRequest {
   prerequisiteSubjectId: string;
 }
+
+export interface PrerequisiteResponse {
+  id: string;
+  subjectId: string;
+  prerequisiteSubjectId: string;
+  prerequisiteSubject: SubjectResponse;
+  createdAt: string;
+  updatedAt: string;
+}

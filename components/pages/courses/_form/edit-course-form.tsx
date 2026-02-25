@@ -1,0 +1,91 @@
+"use client";
+
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+import { usePatchCourse } from "@/hooks/api/course/use-patch-course";
+import { PatchCourseRequest, CourseResponse } from "@/data/interface/course";
+import { Button, Field, FieldLabel, Input, Textarea } from "@/components/ui";
+
+interface Props {
+  course: CourseResponse;
+}
+
+export function EditCourseForm({ course }: Props) {
+  const router = useRouter();
+  const [form, setForm] = React.useState<PatchCourseRequest>({
+    code: course.code,
+    name: course.name,
+    description: course.description,
+  });
+
+  const { mutate, isPending } = usePatchCourse();
+
+  const set =
+    (field: keyof PatchCourseRequest) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setForm((prev) => ({ ...prev, [field]: e.target.value }));
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutate(
+      { id: course.id, payload: form },
+      {
+        onSuccess: () => {
+          toast.success("Course updated successfully");
+          router.push("/courses");
+        },
+        onError: () => toast.error("Failed to update course"),
+      },
+    );
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <Field>
+        <FieldLabel htmlFor="ec-code">Course Code</FieldLabel>
+        <Input
+          id="ec-code"
+          value={form.code ?? ""}
+          onChange={set("code")}
+          required
+        />
+      </Field>
+
+      <Field>
+        <FieldLabel htmlFor="ec-name">Course Name</FieldLabel>
+        <Input
+          id="ec-name"
+          value={form.name ?? ""}
+          onChange={set("name")}
+          required
+        />
+      </Field>
+
+      <Field>
+        <FieldLabel htmlFor="ec-description">Description</FieldLabel>
+        <Textarea
+          id="ec-description"
+          value={form.description ?? ""}
+          onChange={set("description")}
+          rows={4}
+        />
+      </Field>
+
+      <div className="flex items-center justify-end gap-3 pt-2">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => router.push("/courses")}
+          disabled={isPending}
+        >
+          Cancel
+        </Button>
+        <Button type="submit" disabled={isPending}>
+          {isPending ? "Saving…" : "Save Changes"}
+        </Button>
+      </div>
+    </form>
+  );
+}
