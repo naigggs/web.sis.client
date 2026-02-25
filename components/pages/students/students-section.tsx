@@ -9,11 +9,14 @@ import {
   IconTrash,
   IconPencil,
   IconLoader2,
+  IconFilter,
+  IconX,
 } from "@tabler/icons-react";
 
 import { useGetStudents } from "@/hooks/api/student/use-get-students";
 import { useBulkDeleteStudents } from "@/hooks/api/student/use-bulk-delete-students";
 import { usePatchStudent } from "@/hooks/api/student/use-patch-student";
+import { useGetCourses } from "@/hooks/api/course/use-get-courses";
 import { StudentResponse } from "@/data/interface/student";
 import {
   Button,
@@ -27,6 +30,16 @@ import {
   Checkbox,
   Badge,
   Skeleton,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuSeparator,
+  Command,
+  CommandInput,
+  CommandList,
+  CommandItem,
+  CommandEmpty,
+  CommandGroup,
   AlertDialog,
   AlertDialogContent,
   AlertDialogHeader,
@@ -64,6 +77,11 @@ export function StudentsSection() {
   // Selection
   const [selectedIds, setSelectedIds] = React.useState<Set<string>>(new Set());
 
+  // Course faceted filter
+  const [selectedCourseIds, setSelectedCourseIds] = React.useState<Set<string>>(
+    new Set(),
+  );
+
   const router = useRouter();
 
   // Dialogs
@@ -80,19 +98,26 @@ export function StudentsSection() {
     limit: 20,
     search: debouncedSearch || undefined,
   });
-  const students = data?.students ?? [];
+  const allStudents = data?.students ?? [];
+  const students =
+    selectedCourseIds.size === 0
+      ? allStudents
+      : allStudents.filter((s) => selectedCourseIds.has(s.courseId));
   const pagination = data?.pagination;
+
+  // Courses for filter options
+  const { data: coursesData } = useGetCourses();
 
   // Mutations
   const { mutate: bulkDeleteStudents, isPending: isDeleting } =
     useBulkDeleteStudents();
   const { mutate: patchStudent } = usePatchStudent();
 
-  // Reset to page 1 when search changes
+  // Reset to page 1 when search or course filter changes
   React.useEffect(() => {
     setPage(1);
     setSelectedIds(new Set());
-  }, [debouncedSearch]);
+  }, [debouncedSearch, selectedCourseIds]);
 
   // ── Selection helpers ────────────────────────────────────────────────────────
   const allSelected =
@@ -205,6 +230,68 @@ export function StudentsSection() {
             className="pl-9"
           />
         </div>
+
+        {/* ── Course faceted filter ── */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant={selectedCourseIds.size > 0 ? "default" : "outline"}
+              size="sm"
+              className="gap-1.5"
+            >
+              <IconFilter className="h-4 w-4" />
+              Course
+              {selectedCourseIds.size > 0 && (
+                <Badge variant="secondary" className="ml-1 px-1.5 py-0 text-xs">
+                  {selectedCourseIds.size}
+                </Badge>
+              )}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="w-64 p-0">
+            <Command>
+              <CommandInput placeholder="Search courses..." />
+              <CommandList>
+                <CommandEmpty>No courses found.</CommandEmpty>
+                <CommandGroup>
+                  {(coursesData?.courses ?? []).map((course) => (
+                    <CommandItem
+                      key={course.id}
+                      value={`${course.code} ${course.name}`}
+                      data-checked={selectedCourseIds.has(course.id)}
+                      onSelect={() => {
+                        setSelectedCourseIds((prev) => {
+                          const next = new Set(prev);
+                          next.has(course.id)
+                            ? next.delete(course.id)
+                            : next.add(course.id);
+                          return next;
+                        });
+                      }}
+                    >
+                      <span className="font-mono text-xs">{course.code}</span>
+                      <span className="truncate text-muted-foreground">
+                        {course.name}
+                      </span>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+            {selectedCourseIds.size > 0 && (
+              <>
+                <DropdownMenuSeparator />
+                <button
+                  className="flex w-full items-center gap-1.5 px-3 py-2 text-xs text-muted-foreground hover:text-foreground"
+                  onClick={() => setSelectedCourseIds(new Set())}
+                >
+                  <IconX className="h-3 w-3" />
+                  Clear filter
+                </button>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         {selectedIds.size > 0 && (
           <Button variant="destructive" onClick={() => setBulkDeleteOpen(true)}>
