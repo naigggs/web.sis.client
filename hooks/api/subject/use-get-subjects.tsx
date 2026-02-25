@@ -3,11 +3,15 @@ import { GetSubjectsParams } from "@/data/interface/subject";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { subjectKeys } from "./subject-keys";
 
-export function useGetSubjects(params: GetSubjectsParams = {}) {
+export function useGetSubjects(
+  params: GetSubjectsParams = {},
+  options?: { enabled?: boolean },
+) {
   return useQuery({
     queryKey: subjectKeys.list(params),
     queryFn: () => getSubjectsApi(params),
     placeholderData: keepPreviousData,
     staleTime: 30_000,
+    enabled: options?.enabled ?? true,
   });
 }
