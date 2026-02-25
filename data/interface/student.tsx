@@ -24,6 +24,7 @@ export interface GetStudentsParams {
   page?: number;
   limit?: number;
   search?: string;
+  courseIds?: string[];
 }
 
 export interface GetStudentsData {

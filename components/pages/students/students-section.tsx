@@ -98,12 +98,10 @@ export function StudentsSection() {
     page,
     limit: 20,
     search: debouncedSearch || undefined,
+    courseIds:
+      selectedCourseIds.size > 0 ? Array.from(selectedCourseIds) : undefined,
   });
-  const allStudents = data?.students ?? [];
-  const students =
-    selectedCourseIds.size === 0
-      ? allStudents
-      : allStudents.filter((s) => selectedCourseIds.has(s.courseId));
+  const students = data?.students ?? [];
   const pagination = data?.pagination;
 
   // Courses for filter options

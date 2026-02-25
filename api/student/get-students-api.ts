@@ -13,6 +13,8 @@ export async function getStudentsApi(
   if (params.page) searchParams.set("page", String(params.page));
   if (params.limit) searchParams.set("limit", String(params.limit));
   if (params.search) searchParams.set("search", params.search);
+  if (params.courseIds?.length)
+    params.courseIds.forEach((id) => searchParams.append("courseId[]", id));
 
   const query = searchParams.toString();
   const res = await fetch(`${API_URL}/v1/students${query ? `?${query}` : ""}`, {
