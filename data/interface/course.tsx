@@ -7,13 +7,21 @@ export interface CourseResponse {
   updatedAt: string;
 }
 
+export interface GetCoursesParams {
+  search?: string;
+}
+
+export interface GetCoursesData {
+  courses: CourseResponse[];
+}
+
 export interface CreateCourseRequest {
   code: string;
   name: string;
   description: string;
 }
 
-export interface PatcbCourseRequest {
+export interface PatchCourseRequest {
   code?: string;
   name?: string;
   description?: string;

@@ -1,3 +1,4 @@
+import { Pagination } from "./api";
 import { CourseResponse } from "./course";
 
 export interface SubjectResponse {
@@ -9,6 +10,27 @@ export interface SubjectResponse {
   createdAt: string;
   updatedAt: string;
   course: CourseResponse;
+}
+
+export interface PrerequisiteResponse {
+  id: string;
+  subjectId: string;
+  prerequisiteSubjectId: string;
+  createdAt: string;
+  updatedAt: string;
+  prerequisiteSubject: SubjectResponse;
+}
+
+export interface GetSubjectsParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+  courseId?: string;
+}
+
+export interface GetSubjectsData {
+  subjects: SubjectResponse[];
+  pagination: Pagination;
 }
 
 export interface CreateSubjectRequest {
