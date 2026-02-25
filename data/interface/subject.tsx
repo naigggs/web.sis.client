@@ -1,5 +1,6 @@
 import { Pagination } from "./api";
 import { CourseResponse } from "./course";
+import { MissingPrerequisiteResponse } from "./missing-prerequisite";
 
 export interface SubjectResponse {
   id: string;
@@ -19,16 +20,7 @@ export interface SubjectStatusResponse {
   units: number;
   eligible: boolean;
   alreadyReserved: boolean;
-  missingPrerequisites: PrerequisiteResponse[];
-}
-
-export interface PrerequisiteResponse {
-  id: string;
-  subjectId: string;
-  prerequisiteSubjectId: string;
-  createdAt: string;
-  updatedAt: string;
-  prerequisiteSubject: SubjectResponse;
+  missingPrerequisites: MissingPrerequisiteResponse[];
 }
 
 export interface GetSubjectsParams {

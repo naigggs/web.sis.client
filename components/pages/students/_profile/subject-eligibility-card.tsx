@@ -119,7 +119,7 @@ export function SubjectEligibilityCard({ subjectStatus, isLoading }: Props) {
                             className="inline-flex items-center gap-0.5 rounded-md bg-destructive/10 text-destructive px-1.5 py-0.5 text-xs font-mono"
                           >
                             <IconAlertTriangle className="h-2.5 w-2.5" />
-                            {p.prerequisiteSubject.code}
+                            {p.code}
                           </span>
                         ))}
                       </div>
