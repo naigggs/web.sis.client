@@ -9,4 +9,6 @@ export const subjectKeys = {
   detail: (id: string) => [...subjectKeys.details(), id] as const,
   prerequisites: (id: string) =>
     [...subjectKeys.detail(id), "prerequisites"] as const,
+  enrolledStudents: (id: string) =>
+    [...subjectKeys.detail(id), "enrolled-students"] as const,
 };

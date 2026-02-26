@@ -4,14 +4,12 @@ import * as React from "react";
 import { toast } from "sonner";
 import { IconLoader2, IconFilter } from "@tabler/icons-react";
 
-import { useGetStudents } from "@/hooks/api/student/use-get-students";
-import { useGetGrades } from "@/hooks/api/grade/use-get-grades";
+import { useGetEnrolledStudents } from "@/hooks/api/subject/use-get-enrolled-students";
 import { useCreateGrade } from "@/hooks/api/grade/use-create-grade";
 import { usePatchGrade } from "@/hooks/api/grade/use-patch-grade";
 import { useGetCourses } from "@/hooks/api/course/use-get-courses";
 import { useGetSubjects } from "@/hooks/api/subject/use-get-subjects";
-import { StudentResponse } from "@/data/interface/student";
-import { GradeResponse } from "@/data/interface/grade";
+import { EnrolledStudentResponse } from "@/data/interface/subject";
 import {
   Input,
   Table,
@@ -57,31 +55,13 @@ export function GradingSection() {
   );
   const subjects = subjectsData?.subjects ?? [];
 
-  // All students for selected course (up to 500 — grading sheets are per-course)
-  const { data: studentsData, isLoading: isLoadingStudents } = useGetStudents({
-    courseIds: selectedCourseId ? [selectedCourseId] : undefined,
-    limit: 500,
-  });
-  const students: StudentResponse[] = studentsData?.students ?? [];
-
-  // Grades for selected course + subject
+  // Enrolled students for selected subject — each row already contains grade | null
   const {
-    data: gradesData,
-    isLoading: isLoadingGrades,
-    isFetching: isFetchingGrades,
-  } = useGetGrades(
-    selectedSubjectId && selectedCourseId
-      ? { subjectId: selectedSubjectId, courseId: selectedCourseId, limit: 500 }
-      : {},
-  );
-  const grades: GradeResponse[] = gradesData?.grades ?? [];
-
-  // Build a map: studentId → GradeResponse
-  const gradeMap = React.useMemo(() => {
-    const map = new Map<string, GradeResponse>();
-    grades.forEach((g) => map.set(g.studentId, g));
-    return map;
-  }, [grades]);
+    data: enrolledData,
+    isLoading: isLoadingEnrolled,
+    isFetching: isFetchingEnrolled,
+  } = useGetEnrolledStudents(selectedSubjectId || undefined);
+  const enrolledStudents: EnrolledStudentResponse[] = enrolledData ?? [];
 
   // ── Mutations ──────────────────────────────────────────────────────────────
   const { mutate: createGrade } = useCreateGrade();
@@ -107,7 +87,8 @@ export function GradingSection() {
     const { studentId, field, value } = inlineEdit;
     const numericValue = value === "" ? undefined : Number(value);
     const payload = { [field]: numericValue };
-    const existingGrade = gradeMap.get(studentId);
+    const existingGrade =
+      enrolledStudents.find((s) => s.id === studentId)?.grade ?? null;
 
     if (existingGrade) {
       // Update existing grade record
@@ -141,7 +122,7 @@ export function GradingSection() {
 
   // ── Derived state ──────────────────────────────────────────────────────────
   const isReady = !!selectedCourseId && !!selectedSubjectId;
-  const isTableLoading = isReady && (isLoadingStudents || isLoadingGrades);
+  const isTableLoading = isReady && isLoadingEnrolled;
 
   const selectedCourse = courses.find((c) => c.id === selectedCourseId);
   const selectedSubject = subjects.find((s) => s.id === selectedSubjectId);
@@ -157,7 +138,7 @@ export function GradingSection() {
             Select a course and subject to view and encode student grades.
           </p>
         </div>
-        {isFetchingGrades && !isLoadingGrades && (
+        {isFetchingEnrolled && !isLoadingEnrolled && (
           <IconLoader2 className="text-muted-foreground h-4 w-4 animate-spin" />
         )}
       </div>
@@ -250,7 +231,8 @@ export function GradingSection() {
             <>
               <span className="text-muted-foreground">·</span>
               <span className="text-muted-foreground">
-                {students.length} student{students.length !== 1 ? "s" : ""}
+                {enrolledStudents.length} student
+                {enrolledStudents.length !== 1 ? "s" : ""}
               </span>
             </>
           )}
@@ -300,27 +282,27 @@ export function GradingSection() {
                     ))}
                   </TableRow>
                 ))
-              ) : students.length === 0 ? (
+              ) : enrolledStudents.length === 0 ? (
                 <TableRow>
                   <TableCell
                     colSpan={8}
                     className="py-16 text-center text-muted-foreground"
                   >
-                    No students enrolled in this course.
+                    No students enrolled in this subject.
                   </TableCell>
                 </TableRow>
               ) : (
-                students.map((student) => {
-                  const grade = gradeMap.get(student.id) ?? null;
+                enrolledStudents.map((row) => {
+                  const grade = row.grade;
 
                   const editingPrelim =
-                    inlineEdit?.studentId === student.id &&
+                    inlineEdit?.studentId === row.id &&
                     inlineEdit.field === "prelim";
                   const editingMidterm =
-                    inlineEdit?.studentId === student.id &&
+                    inlineEdit?.studentId === row.id &&
                     inlineEdit.field === "midterm";
                   const editingFinals =
-                    inlineEdit?.studentId === student.id &&
+                    inlineEdit?.studentId === row.id &&
                     inlineEdit.field === "finals";
 
                   const renderGradeCell = (
@@ -331,7 +313,7 @@ export function GradingSection() {
                     <TableCell
                       className="text-center cursor-text"
                       onDoubleClick={() =>
-                        !isEditing && startEdit(student.id, field, value)
+                        !isEditing && startEdit(row.id, field, value)
                       }
                     >
                       {isEditing ? (
@@ -368,8 +350,7 @@ export function GradingSection() {
                                     ? (grade?.midterm ?? null)
                                     : (grade?.finals ?? null);
                                 setTimeout(
-                                  () =>
-                                    startEdit(student.id, nextField, nextVal),
+                                  () => startEdit(row.id, nextField, nextVal),
                                   0,
                                 );
                               }
@@ -386,14 +367,14 @@ export function GradingSection() {
                   );
 
                   return (
-                    <TableRow key={student.id}>
+                    <TableRow key={row.id}>
                       <TableCell className="pl-4 font-mono text-xs">
-                        {student.studentNo}
+                        {row.studentNo}
                       </TableCell>
                       <TableCell className="font-medium">
-                        {student.lastName}
+                        {row.lastName}
                       </TableCell>
-                      <TableCell>{student.firstName}</TableCell>
+                      <TableCell>{row.firstName}</TableCell>
                       {renderGradeCell(
                         "prelim",
                         grade?.prelim ?? null,

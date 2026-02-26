@@ -61,3 +61,23 @@ export interface PrerequisiteResponse {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface EnrolledStudentGrade {
+  id: string;
+  prelim: string | null;
+  midterm: string | null;
+  finals: string | null;
+  finalGrade: string | null;
+  remarks: "PASSED" | "FAILED" | null;
+}
+
+export interface EnrolledStudentResponse {
+  id: string;
+  studentNo: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  birthDate: string;
+  course: CourseResponse;
+  grade: EnrolledStudentGrade | null;
+}
