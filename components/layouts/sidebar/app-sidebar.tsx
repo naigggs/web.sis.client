@@ -4,7 +4,6 @@ import * as React from "react";
 import Image from "next/image";
 
 import { NavMain } from "./nav-main";
-import { NavProjects } from "./nav-projects";
 import { NavSecondary } from "./nav-secondary";
 import { NavUser } from "./nav-user";
 import {
@@ -16,9 +15,30 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui";
-import { data } from "@/data/sidebar/data";
+import { data, type NavRole } from "@/data/sidebar/data";
+import { useAuth } from "@/hooks/use-auth";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user } = useAuth();
+
+  const filteredNav = React.useMemo(() => {
+    if (!user) return [];
+    return data.navMain.filter((item) =>
+      item.roles.includes(user.role as NavRole),
+    );
+  }, [user]);
+
+  const navUser = React.useMemo(() => {
+    if (!user) return data.user;
+    const namePart = user.email.split("@")[0] ?? user.email;
+    const displayName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+    return {
+      name: displayName,
+      email: user.email,
+      avatar: "/avatars/shadcn.jpg",
+    };
+  }, [user]);
+
   return (
     <Sidebar
       className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
@@ -50,12 +70,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        {/* <NavProjects projects={data.projects} /> */}
+        <NavMain items={filteredNav} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={navUser} />
       </SidebarFooter>
     </Sidebar>
   );
