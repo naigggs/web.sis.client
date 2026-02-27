@@ -36,6 +36,12 @@ export const data = {
   navMain: [
     // ── Admin ──────────────────────────────────────────────────────────
     {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: GraduationCap,
+      roles: ["admin"] as NavRole[],
+    },
+    {
       title: "Students",
       url: "/students",
       icon: GraduationCap,
@@ -51,6 +57,7 @@ export const data = {
       url: "/courses",
       icon: BookOpen,
       roles: ["admin"] as NavRole[],
+      isActive: true,
       items: [
         { title: "All Courses", url: "/courses" },
         { title: "Add Course", url: "/courses/create" },
@@ -61,6 +68,7 @@ export const data = {
       url: "/subjects",
       icon: Layers,
       roles: ["admin"] as NavRole[],
+      isActive: true,
       items: [
         { title: "All Subjects", url: "/subjects" },
         { title: "Add Subject", url: "/subjects/create" },
@@ -72,7 +80,6 @@ export const data = {
       url: "/reservations",
       icon: CalendarCheck,
       roles: ["admin"] as NavRole[],
-      items: [{ title: "All Reservations", url: "/reservations" }],
     },
     // ── Admin + Staff ─────────────────────────────────────────────────
     {
@@ -80,7 +87,6 @@ export const data = {
       url: "/grades",
       icon: FileSpreadsheet,
       roles: ["admin", "staff"] as NavRole[],
-      items: [{ title: "All Grades", url: "/grades" }],
     },
     // ── Student ───────────────────────────────────────────────────────
     {
@@ -97,18 +103,7 @@ export const data = {
       roles: ["student"] as NavRole[],
       items: [{ title: "Profile", url: "/profile" }],
     },
-    // ── Admin only ────────────────────────────────────────────────────
-    {
-      title: "Settings",
-      url: "/settings",
-      icon: Settings2,
-      roles: ["admin"] as NavRole[],
-      items: [{ title: "General", url: "/settings" }],
-    },
   ] satisfies NavMainItem[],
-  navSecondary: [
-    { title: "Support", url: "#", icon: LifeBuoy },
-    { title: "Feedback", url: "#", icon: Send },
-  ],
+  navSecondary: [],
   projects: [],
 };
