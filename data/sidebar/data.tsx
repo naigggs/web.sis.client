@@ -3,12 +3,10 @@ import {
   CalendarCheck,
   FileSpreadsheet,
   GraduationCap,
-  LifeBuoy,
   Layers,
-  Settings2,
-  Send,
   UserCircle,
   type LucideIcon,
+  LayoutDashboard,
 } from "lucide-react";
 
 export type NavRole = "admin" | "staff" | "student";
@@ -38,7 +36,7 @@ export const data = {
     {
       title: "Dashboard",
       url: "/dashboard",
-      icon: GraduationCap,
+      icon: LayoutDashboard,
       roles: ["admin"] as NavRole[],
     },
     {

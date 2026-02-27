@@ -73,6 +73,7 @@ interface StatCardProps {
   isLoading: boolean;
   icon: React.ReactNode;
   description?: string;
+  iconBg?: string;
 }
 
 function StatCard({
@@ -81,25 +82,28 @@ function StatCard({
   isLoading,
   icon,
   description,
+  iconBg = "bg-muted text-muted-foreground",
 }: StatCardProps) {
   return (
-    <Card>
+    <Card className="transition-shadow hover:shadow-md">
       <CardContent className="pt-5">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-muted-foreground text-sm font-medium">
-            {label}
-          </span>
-          <div className="p-2 rounded-lg bg-muted">{icon}</div>
+        <div className="flex items-start justify-between mb-4">
+          <div className="space-y-0.5">
+            <span className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
+              {label}
+            </span>
+            {isLoading ? (
+              <Skeleton className="h-8 w-20 mt-1" />
+            ) : (
+              <p className="text-3xl font-bold tabular-nums">
+                {value?.toLocaleString() ?? "—"}
+              </p>
+            )}
+          </div>
+          <div className={`p-2.5 rounded-xl ${iconBg}`}>{icon}</div>
         </div>
-        {isLoading ? (
-          <Skeleton className="h-8 w-20" />
-        ) : (
-          <p className="text-3xl font-bold tabular-nums">
-            {value?.toLocaleString() ?? "—"}
-          </p>
-        )}
         {description && (
-          <p className="text-xs text-muted-foreground mt-1">{description}</p>
+          <p className="text-xs text-muted-foreground">{description}</p>
         )}
       </CardContent>
     </Card>
@@ -165,21 +169,24 @@ export function StudentDashboard({ user }: Props) {
           label="Active Reservations"
           value={activeReservations.length}
           isLoading={reservationsLoading}
-          icon={<IconCalendarCheck className="h-4 w-4 text-muted-foreground" />}
+          icon={<IconCalendarCheck className="h-4 w-4" />}
+          iconBg="bg-sky-500/10 text-sky-600 dark:text-sky-400"
           description="Reserved or approved subjects"
         />
         <StatCard
           label="Grades Received"
           value={gradedCount}
           isLoading={meLoading}
-          icon={<IconChartBar className="h-4 w-4 text-muted-foreground" />}
+          icon={<IconChartBar className="h-4 w-4" />}
+          iconBg="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
           description="Subjects with final grade"
         />
         <StatCard
           label="Eligible Subjects"
           value={eligibleCount}
           isLoading={eligibleLoading}
-          icon={<IconBook2 className="h-4 w-4 text-muted-foreground" />}
+          icon={<IconBook2 className="h-4 w-4" />}
+          iconBg="bg-violet-500/10 text-violet-600 dark:text-violet-400"
           description="Subjects you can enroll in"
         />
       </div>
