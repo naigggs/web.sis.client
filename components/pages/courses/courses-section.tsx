@@ -9,6 +9,7 @@ import {
   IconTrash,
   IconPencil,
   IconLoader2,
+  IconEye,
 } from "@tabler/icons-react";
 
 import { useGetCourses } from "@/hooks/api/course/use-get-courses";
@@ -375,6 +376,14 @@ export function CoursesSection() {
                     {/* Actions */}
                     <TableCell className="text-right pr-4">
                       <div className="flex items-center justify-end gap-1">
+                        <Button
+                          size="icon-sm"
+                          variant="ghost"
+                          onClick={() => router.push(`/courses/${course.id}`)}
+                          aria-label="View course"
+                        >
+                          <IconEye className="h-4 w-4" />
+                        </Button>
                         <Button
                           size="icon-sm"
                           variant="ghost"
