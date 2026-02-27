@@ -1,4 +1,4 @@
-import { createStudentApi } from "@/api/student/create-student-api";
+import { createStudentApi } from "@/api-calls/student/create-student-api";
 import { CreateStudentRequest } from "@/data/interface/student";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { studentKeys } from "./student-keys";

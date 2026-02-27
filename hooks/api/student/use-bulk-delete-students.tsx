@@ -1,4 +1,4 @@
-import { bulkDeleteStudentsApi } from "@/api/student/bulk-delete-students-api";
+import { bulkDeleteStudentsApi } from "@/api-calls/student/bulk-delete-students-api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { studentKeys } from "./student-keys";
 

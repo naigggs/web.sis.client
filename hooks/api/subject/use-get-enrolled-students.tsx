@@ -1,4 +1,4 @@
-import { getEnrolledStudentsApi } from "@/api/subject/get-enrolled-students-api";
+import { getEnrolledStudentsApi } from "@/api-calls/subject/get-enrolled-students-api";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { subjectKeys } from "./subject-keys";
 

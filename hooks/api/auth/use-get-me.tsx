@@ -1,4 +1,4 @@
-import { meApi } from "@/api/auth/me-api";
+import { meApi } from "@/api-calls/auth/me-api";
 import { useQuery } from "@tanstack/react-query";
 
 export const authKeys = {

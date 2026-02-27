@@ -1,4 +1,4 @@
-import { getUsersApi } from "@/api/user/get-users-api";
+import { getUsersApi } from "@/api-calls/user/get-users-api";
 import { GetUsersParams } from "@/data/interface/user";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { userKeys } from "./user-keys";

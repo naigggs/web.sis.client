@@ -1,4 +1,4 @@
-import { getPrerequisitesApi } from "@/api/subject/get-prerequisites-api";
+import { getPrerequisitesApi } from "@/api-calls/subject/get-prerequisites-api";
 import { useQuery } from "@tanstack/react-query";
 import { subjectKeys } from "./subject-keys";
 

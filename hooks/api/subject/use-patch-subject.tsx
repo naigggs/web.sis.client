@@ -1,4 +1,4 @@
-import { patchSubjectApi } from "@/api/subject/patch-subject-api";
+import { patchSubjectApi } from "@/api-calls/subject/patch-subject-api";
 import { PatchSubjectRequest } from "@/data/interface/subject";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { subjectKeys } from "./subject-keys";

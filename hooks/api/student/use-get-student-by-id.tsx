@@ -1,4 +1,4 @@
-import { getStudentByIdApi } from "@/api/student/get-student-by-id-api";
+import { getStudentByIdApi } from "@/api-calls/student/get-student-by-id-api";
 import { useQuery } from "@tanstack/react-query";
 import { studentKeys } from "./student-keys";
 

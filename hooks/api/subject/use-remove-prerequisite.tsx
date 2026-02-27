@@ -1,4 +1,4 @@
-import { removePrerequisiteApi } from "@/api/subject/remove-prerequisite-api";
+import { removePrerequisiteApi } from "@/api-calls/subject/remove-prerequisite-api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { subjectKeys } from "./subject-keys";
 

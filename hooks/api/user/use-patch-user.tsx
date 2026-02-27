@@ -1,4 +1,4 @@
-import { patchUserApi } from "@/api/user/patch-user-api";
+import { patchUserApi } from "@/api-calls/user/patch-user-api";
 import { PatchUserRequest } from "@/data/interface/user";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { userKeys } from "./user-keys";

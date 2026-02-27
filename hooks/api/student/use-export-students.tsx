@@ -1,4 +1,4 @@
-import { exportStudentsApi } from "@/api/student/export-students-api";
+import { exportStudentsApi } from "@/api-calls/student/export-students-api";
 import { useMutation } from "@tanstack/react-query";
 
 export function useExportStudents() {

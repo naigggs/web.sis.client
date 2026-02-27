@@ -1,4 +1,4 @@
-import { patchGradeApi } from "@/api/grade/patch-grade-api";
+import { patchGradeApi } from "@/api-calls/grade/patch-grade-api";
 import { PatchGradeRequest } from "@/data/interface/grade";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { gradeKeys } from "./grade-keys";

@@ -1,4 +1,4 @@
-import { patchCourseApi } from "@/api/course/patch-course-api";
+import { patchCourseApi } from "@/api-calls/course/patch-course-api";
 import { PatchCourseRequest } from "@/data/interface/course";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { courseKeys } from "./course-keys";

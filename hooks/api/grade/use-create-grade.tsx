@@ -1,4 +1,4 @@
-import { createGradeApi } from "@/api/grade/create-grade-api";
+import { createGradeApi } from "@/api-calls/grade/create-grade-api";
 import { CreateGradeRequest } from "@/data/interface/grade";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { gradeKeys } from "./grade-keys";

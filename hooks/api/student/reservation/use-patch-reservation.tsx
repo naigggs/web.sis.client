@@ -1,4 +1,4 @@
-import { patchReservationApi } from "@/api/student/reservation/patch-reservation-api";
+import { patchReservationApi } from "@/api-calls/student/reservation/patch-reservation-api";
 import { PatchReservationRequest } from "@/data/interface/reservation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { studentKeys } from "../student-keys";

@@ -1,4 +1,4 @@
-import { createCourseApi } from "@/api/course/create-course-api";
+import { createCourseApi } from "@/api-calls/course/create-course-api";
 import { CreateCourseRequest } from "@/data/interface/course";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { courseKeys } from "./course-keys";

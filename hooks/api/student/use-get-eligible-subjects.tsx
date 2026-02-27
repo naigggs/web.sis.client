@@ -1,4 +1,4 @@
-import { getEligibleSubjectsApi } from "@/api/student/get-eligible-subjects-api";
+import { getEligibleSubjectsApi } from "@/api-calls/student/get-eligible-subjects-api";
 import { useQuery } from "@tanstack/react-query";
 import { studentKeys } from "./student-keys";
 

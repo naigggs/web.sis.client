@@ -1,4 +1,4 @@
-import { getMeStudentApi } from "@/api/student/me/get-me-student-api";
+import { getMeStudentApi } from "@/api-calls/student/me/get-me-student-api";
 import { useQuery } from "@tanstack/react-query";
 import { meStudentKeys } from "./me-student-keys";
 

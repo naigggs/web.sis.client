@@ -1,4 +1,4 @@
-import { unreserveMeApi } from "@/api/student/me/unreserve-me-api";
+import { unreserveMeApi } from "@/api-calls/student/me/unreserve-me-api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { meStudentKeys } from "./me-student-keys";
 

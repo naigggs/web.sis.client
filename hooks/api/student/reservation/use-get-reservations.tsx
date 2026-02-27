@@ -1,4 +1,4 @@
-import { getReservationsApi } from "@/api/student/reservation/get-reservations-api";
+import { getReservationsApi } from "@/api-calls/student/reservation/get-reservations-api";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { studentKeys } from "../student-keys";
 

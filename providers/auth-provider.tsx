@@ -4,9 +4,9 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 
 import { AuthContext } from "@/contexts/auth-context";
-import { loginApi } from "@/api/auth/login-api";
-import { logoutApi } from "@/api/auth/logout-api";
-import { refreshApi } from "@/api/auth/refresh-api";
+import { loginApi } from "@/api-calls/auth/login-api";
+import { logoutApi } from "@/api-calls/auth/logout-api";
+import { refreshApi } from "@/api-calls/auth/refresh-api";
 import { LoginRequest } from "@/data/interface/auth";
 import { UserResponse } from "@/data/interface/user";
 

@@ -1,4 +1,4 @@
-import { patchStudentApi } from "@/api/student/patch-student-api";
+import { patchStudentApi } from "@/api-calls/student/patch-student-api";
 import { PatchStudentRequest } from "@/data/interface/student";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { studentKeys } from "./student-keys";

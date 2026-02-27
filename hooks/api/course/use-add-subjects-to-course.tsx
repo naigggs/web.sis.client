@@ -1,4 +1,4 @@
-import { addSubjectsToCourseApi } from "@/api/course/add-subjects-to-course-api";
+import { addSubjectsToCourseApi } from "@/api-calls/course/add-subjects-to-course-api";
 import { AddSubjectsToCourseRequest } from "@/data/interface/course";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { courseKeys } from "./course-keys";

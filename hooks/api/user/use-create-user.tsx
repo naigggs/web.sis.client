@@ -1,4 +1,4 @@
-import { createUserApi } from "@/api/user/create-user-api";
+import { createUserApi } from "@/api-calls/user/create-user-api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { userKeys } from "./user-keys";
 

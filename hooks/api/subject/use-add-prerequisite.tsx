@@ -1,4 +1,4 @@
-import { addPrerequisiteApi } from "@/api/subject/add-prerequisite-api";
+import { addPrerequisiteApi } from "@/api-calls/subject/add-prerequisite-api";
 import { AddPrerequisiteRequest } from "@/data/interface/subject";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { subjectKeys } from "./subject-keys";

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { courseKeys } from "./course-keys";
-import { bulkDeleteCoursesApi } from "@/api/course/bulk-delete-courses-api";
+import { bulkDeleteCoursesApi } from "@/api-calls/course/bulk-delete-courses-api";
 
 export function useBulkDeleteCourses() {
   const queryClient = useQueryClient();

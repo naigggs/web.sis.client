@@ -1,4 +1,4 @@
-import { hardDeleteUserApi } from "@/api/user/hard-delete-user-api";
+import { hardDeleteUserApi } from "@/api-calls/user/hard-delete-user-api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { userKeys } from "./user-keys";
 

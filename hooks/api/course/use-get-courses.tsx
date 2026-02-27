@@ -1,4 +1,4 @@
-import { getCoursesApi } from "@/api/course/get-courses-api";
+import { getCoursesApi } from "@/api-calls/course/get-courses-api";
 import { GetCoursesParams } from "@/data/interface/course";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { courseKeys } from "./course-keys";

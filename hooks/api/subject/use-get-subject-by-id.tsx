@@ -1,4 +1,4 @@
-import { getSubjectByIdApi } from "@/api/subject/get-subject-by-id-api";
+import { getSubjectByIdApi } from "@/api-calls/subject/get-subject-by-id-api";
 import { useQuery } from "@tanstack/react-query";
 import { subjectKeys } from "./subject-keys";
 

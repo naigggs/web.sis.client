@@ -1,4 +1,4 @@
-import { createSubjectApi } from "@/api/subject/create-subject-api";
+import { createSubjectApi } from "@/api-calls/subject/create-subject-api";
 import { CreateSubjectRequest } from "@/data/interface/subject";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { subjectKeys } from "./subject-keys";
