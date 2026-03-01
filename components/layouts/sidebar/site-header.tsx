@@ -30,6 +30,7 @@ const SEGMENT_LABELS: Record<string, string> = {
   profile: "My Profile",
   account: "Account",
   settings: "Settings",
+  users: "Users",
   create: "Create",
   edit: "Edit",
   prerequisites: "Prerequisites",

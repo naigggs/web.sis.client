@@ -5,6 +5,7 @@ import {
   GraduationCap,
   Layers,
   UserCircle,
+  Users,
   type LucideIcon,
   LayoutDashboard,
 } from "lucide-react";
@@ -77,6 +78,12 @@ export const data = {
       title: "Reservations",
       url: "/reservations",
       icon: CalendarCheck,
+      roles: ["admin"] as NavRole[],
+    },
+    {
+      title: "Users",
+      url: "/users",
+      icon: Users,
       roles: ["admin"] as NavRole[],
     },
     // ── Admin + Staff ─────────────────────────────────────────────────

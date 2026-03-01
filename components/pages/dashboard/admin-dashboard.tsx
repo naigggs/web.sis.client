@@ -162,7 +162,7 @@ export function AdminDashboard({ user }: Props) {
         </CardHeader>
         <Separator />
         <CardContent className="pt-4">
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
             <Button
               variant="outline"
               className="h-auto flex-col gap-2 py-4"
@@ -202,6 +202,14 @@ export function AdminDashboard({ user }: Props) {
             >
               <IconChartBar className="h-5 w-5" />
               <span className="text-xs">Grading Sheet</span>
+            </Button>
+            <Button
+              variant="outline"
+              className="h-auto flex-col gap-2 py-4"
+              onClick={() => router.push("/users")}
+            >
+              <IconUserCog className="h-5 w-5" />
+              <span className="text-xs">Manage Users</span>
             </Button>
           </div>
         </CardContent>
