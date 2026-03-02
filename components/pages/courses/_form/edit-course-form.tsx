@@ -5,11 +5,23 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { usePatchCourse } from "@/hooks/api/course/use-patch-course";
-import { PatchCourseRequest, CourseResponse } from "@/data/interface/course";
-import { Button, Field, FieldLabel, Input, Textarea } from "@/components/ui";
+import {
+  CourseWithSubjectsResponse,
+  PatchCourseRequest,
+} from "@/data/interface/course";
+import {
+  Button,
+  Field,
+  FieldLabel,
+  Input,
+  Separator,
+  Textarea,
+} from "@/components/ui";
+
+import { CourseSubjectsCard } from "../_detail/course-subjects-card";
 
 interface Props {
-  course: CourseResponse;
+  course: CourseWithSubjectsResponse;
 }
 
 export function EditCourseForm({ course }: Props) {
@@ -34,7 +46,7 @@ export function EditCourseForm({ course }: Props) {
       {
         onSuccess: () => {
           toast.success("Course updated successfully");
-          router.push("/courses");
+          router.push(`/courses/${course.id}`);
         },
         onError: () => toast.error("Failed to update course"),
       },
@@ -42,50 +54,60 @@ export function EditCourseForm({ course }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <Field>
-        <FieldLabel htmlFor="ec-code">Course Code</FieldLabel>
-        <Input
-          id="ec-code"
-          value={form.code ?? ""}
-          onChange={set("code")}
-          required
-        />
-      </Field>
+    <div className="flex flex-col gap-6">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <Field>
+          <FieldLabel htmlFor="ec-code">Course Code</FieldLabel>
+          <Input
+            id="ec-code"
+            value={form.code ?? ""}
+            onChange={set("code")}
+            required
+          />
+        </Field>
 
-      <Field>
-        <FieldLabel htmlFor="ec-name">Course Name</FieldLabel>
-        <Input
-          id="ec-name"
-          value={form.name ?? ""}
-          onChange={set("name")}
-          required
-        />
-      </Field>
+        <Field>
+          <FieldLabel htmlFor="ec-name">Course Name</FieldLabel>
+          <Input
+            id="ec-name"
+            value={form.name ?? ""}
+            onChange={set("name")}
+            required
+          />
+        </Field>
 
-      <Field>
-        <FieldLabel htmlFor="ec-description">Description</FieldLabel>
-        <Textarea
-          id="ec-description"
-          value={form.description ?? ""}
-          onChange={set("description")}
-          rows={4}
-        />
-      </Field>
+        <Field>
+          <FieldLabel htmlFor="ec-description">Description</FieldLabel>
+          <Textarea
+            id="ec-description"
+            value={form.description ?? ""}
+            onChange={set("description")}
+            rows={4}
+          />
+        </Field>
 
-      <div className="flex items-center justify-end gap-3 pt-2">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => router.push("/courses")}
-          disabled={isPending}
-        >
-          Cancel
-        </Button>
-        <Button type="submit" disabled={isPending}>
-          {isPending ? "Saving…" : "Save Changes"}
-        </Button>
-      </div>
-    </form>
+        <div className="flex items-center justify-end gap-3 pt-2">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => router.push(`/courses/${course.id}`)}
+            disabled={isPending}
+          >
+            Cancel
+          </Button>
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Saving…" : "Save Changes"}
+          </Button>
+        </div>
+      </form>
+
+      <Separator />
+
+      <CourseSubjectsCard
+        courseId={course.id}
+        subjects={course.subjects}
+        isLoading={false}
+      />
+    </div>
   );
 }

@@ -4,22 +4,21 @@ import { useParams } from "next/navigation";
 import { IconArrowLeft } from "@tabler/icons-react";
 import Link from "next/link";
 
-import { useGetCourses } from "@/hooks/api/course/use-get-courses";
+import { useGetCourseById } from "@/hooks/api/course/use-get-course-by-id";
 import { EditCourseForm } from "@/components/pages/courses/_form/edit-course-form";
 import { Skeleton } from "@/components/ui";
 
 export default function EditCoursePage() {
   const { id } = useParams<{ id: string }>();
-  const { data, isLoading } = useGetCourses();
-  const course = data?.courses.find((c) => c.id === id);
+  const { data: course, isLoading, isError } = useGetCourseById(id);
 
   return (
-    <div className="flex flex-col gap-6 p-6 max-w-xl">
+    <div className="flex flex-col gap-6 p-6 max-w-8xl">
       <div className="flex items-center gap-3">
         <Link
-          href="/courses"
+          href={`/courses/${id}`}
           className="text-muted-foreground hover:text-foreground transition-colors"
-          aria-label="Back to courses"
+          aria-label="Back to course"
         >
           <IconArrowLeft className="h-5 w-5" />
         </Link>
@@ -44,7 +43,7 @@ export default function EditCoursePage() {
             </div>
           ))}
         </div>
-      ) : !course ? (
+      ) : isError || !course ? (
         <p className="text-destructive text-sm">Course not found.</p>
       ) : (
         <EditCourseForm course={course} />

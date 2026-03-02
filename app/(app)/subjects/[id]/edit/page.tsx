@@ -13,12 +13,12 @@ export default function EditSubjectPage() {
   const { data: subject, isLoading, isError } = useGetSubjectById(id);
 
   return (
-    <div className="flex flex-col gap-6 p-6 max-w-xl">
+    <div className="flex flex-col gap-6 p-6 max-w-8xl">
       <div className="flex items-center gap-3">
         <Link
-          href="/subjects"
+          href={`/subjects/${id}`}
           className="text-muted-foreground hover:text-foreground transition-colors"
-          aria-label="Back to subjects"
+          aria-label="Back to subject"
         >
           <IconArrowLeft className="h-5 w-5" />
         </Link>

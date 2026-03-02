@@ -129,18 +129,18 @@ All detailed documentation lives in the `.docs/` folder. Each file covers a spec
 
 ### Features
 
-| Document                                                     | Description                                                       |
-| ------------------------------------------------------------ | ----------------------------------------------------------------- |
-| [Dashboard](.docs/features/dashboard.md)                     | Role-specific dashboards — stats, quick actions, recent students  |
-| [Students](.docs/features/students.md)                       | CRUD, data table, import/export, profile, prerequisite status     |
-| [Courses](.docs/features/courses.md)                         | CRUD, data table, course detail, add subjects to course           |
-| [Subjects](.docs/features/subjects.md)                       | CRUD, data table, prerequisite management, course filtering       |
-| [Grades](.docs/features/grades.md)                           | Digital grading sheet, inline editing, upsert, PASSED/FAILED      |
-| [Reservations](.docs/features/reservations.md)               | Admin reservation management, approve/deny/cancel workflow        |
-| [Enrollment](.docs/features/enrollment.md)                   | Student self-service, eligible subjects, prerequisite enforcement |
-| [Users](.docs/features/users.md)                             | User management, role assignment, soft/hard delete                |
-| [Profile & Settings](.docs/features/profile-and-settings.md) | Student profile, theme settings, account management               |
-| [Command Palette](.docs/features/command-palette.md)         | ⌘K search, role-scoped data indexing, keyboard navigation         |
+| Document                                                     | Description                                                                       |
+| ------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| [Dashboard](.docs/features/dashboard.md)                     | Role-specific dashboards — stats, quick actions, recent students                  |
+| [Students](.docs/features/students.md)                       | CRUD, data table, import/export, profile, prerequisite status                     |
+| [Courses](.docs/features/courses.md)                         | CRUD, data table, course detail, add/remove subjects (detail + edit)              |
+| [Subjects](.docs/features/subjects.md)                       | CRUD, data table, subject detail, prerequisites (detail + edit), course filtering |
+| [Grades](.docs/features/grades.md)                           | Digital grading sheet, inline editing, upsert, PASSED/FAILED                      |
+| [Reservations](.docs/features/reservations.md)               | Admin reservation management, approve/deny/cancel workflow                        |
+| [Enrollment](.docs/features/enrollment.md)                   | Student self-service, eligible subjects, prerequisite enforcement                 |
+| [Users](.docs/features/users.md)                             | User management, role assignment, soft/hard delete                                |
+| [Profile & Settings](.docs/features/profile-and-settings.md) | Student profile, theme settings, account management                               |
+| [Command Palette](.docs/features/command-palette.md)         | ⌘K search, role-scoped data indexing, keyboard navigation                         |
 
 ---
 

@@ -11,7 +11,16 @@ import {
 
 import { CourseSubjectResponse, AddSubjectItem } from "@/data/interface/course";
 import { useAddSubjectsToCourse } from "@/hooks/api/course/use-add-subjects-to-course";
+import { useRemoveSubjectFromCourse } from "@/hooks/api/course/use-remove-subject-from-course";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
   Button,
   Card,
   CardContent,
@@ -51,11 +60,15 @@ const EMPTY_SUBJECT: AddSubjectItem = {
 
 export function CourseSubjectsCard({ courseId, subjects, isLoading }: Props) {
   const [open, setOpen] = React.useState(false);
+  const [deleteTarget, setDeleteTarget] =
+    React.useState<CourseSubjectResponse | null>(null);
   const [rows, setRows] = React.useState<AddSubjectItem[]>([
     { ...EMPTY_SUBJECT },
   ]);
 
   const { mutate: addSubjects, isPending } = useAddSubjectsToCourse();
+  const { mutate: removeSubject, isPending: isRemoving } =
+    useRemoveSubjectFromCourse();
 
   const handleAddRow = () => {
     setRows((prev) => [...prev, { ...EMPTY_SUBJECT }]);
@@ -102,6 +115,21 @@ export function CourseSubjectsCard({ courseId, subjects, isLoading }: Props) {
         },
         onError: () => {
           toast.error("Failed to add subjects.");
+        },
+      },
+    );
+  };
+
+  const handleRemove = (subject: CourseSubjectResponse) => {
+    removeSubject(
+      { courseId, subjectId: subject.id },
+      {
+        onSuccess: () => {
+          toast.success(`${subject.code} removed from this course.`);
+          setDeleteTarget(null);
+        },
+        onError: () => {
+          toast.error("Failed to remove subject.");
         },
       },
     );
@@ -228,6 +256,7 @@ export function CourseSubjectsCard({ courseId, subjects, isLoading }: Props) {
                 <TableHead>Title</TableHead>
                 <TableHead className="text-center">Units</TableHead>
                 <TableHead className="text-center">Slot Limit</TableHead>
+                <TableHead className="text-right pr-4">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -241,12 +270,49 @@ export function CourseSubjectsCard({ courseId, subjects, isLoading }: Props) {
                   <TableCell className="text-center">
                     {subject.slotLimit}
                   </TableCell>
+                  <TableCell className="text-right pr-4">
+                    <Button
+                      size="icon-sm"
+                      variant="ghost"
+                      className="text-destructive hover:text-destructive"
+                      onClick={() => setDeleteTarget(subject)}
+                      aria-label="Remove subject"
+                    >
+                      <IconTrash className="h-4 w-4" />
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         )}
       </CardContent>
+
+      <AlertDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => {
+          if (!open) setDeleteTarget(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remove Subject from Course</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to remove{" "}
+              <strong>{deleteTarget?.code}</strong> from this course?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => deleteTarget && handleRemove(deleteTarget)}
+              disabled={isRemoving}
+            >
+              {isRemoving ? "Removing…" : "Remove"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 }

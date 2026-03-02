@@ -1,6 +1,6 @@
 # Courses
 
-The Courses module provides CRUD operations, a data table with search and pagination, and a detail page showing the course's subjects.
+The Courses module provides CRUD operations, a data table with search and pagination, plus full subject management (add/remove) in both detail and edit pages.
 
 **Access:** Admin only
 
@@ -48,14 +48,32 @@ useGetCourses({ page, limit: 20, search })
 1. **Course Info Card** — Code, name, description, timestamps
 2. **Subjects Card** — List of subjects assigned to this course
 
-### Add Subjects to Course
+### Subject Management in Course Detail
 
-Admins can add existing subjects to a course via:
+Admins can manage course subjects directly in the detail page:
 
 ```
 useAddSubjectsToCourse(courseId)
   → POST /v1/courses/:id/subjects
+
+useRemoveSubjectFromCourse(courseId, subjectId)
+  → DELETE /v1/courses/:id/subjects/:subjectId
 ```
+
+Each subject row includes a remove action with confirmation.
+
+---
+
+## Edit Course + Inline Subject Management — `/courses/[id]/edit`
+
+**Component:** `components/pages/courses/_form/edit-course-form.tsx`
+
+The edit course page now includes:
+
+1. Course metadata form (code, name, description)
+2. Embedded `CourseSubjectsCard` below the form
+
+This allows add/remove subject management without leaving edit mode.
 
 ---
 
@@ -75,14 +93,15 @@ useAddSubjectsToCourse(courseId)
 
 ## API Endpoints
 
-| Hook                     | API Call                 | Method                          |
-| ------------------------ | ------------------------ | ------------------------------- |
-| `useGetCourses`          | `getCoursesApi`          | `GET /v1/courses`               |
-| `useGetCourseById`       | `getCourseByIdApi`       | `GET /v1/courses/:id`           |
-| `useCreateCourse`        | `createCourseApi`        | `POST /v1/courses`              |
-| `usePatchCourse`         | `patchCourseApi`         | `PATCH /v1/courses/:id`         |
-| `useBulkDeleteCourses`   | `bulkDeleteCoursesApi`   | `DELETE /v1/courses`            |
-| `useAddSubjectsToCourse` | `addSubjectsToCourseApi` | `POST /v1/courses/:id/subjects` |
+| Hook                         | API Call                     | Method                                       |
+| ---------------------------- | ---------------------------- | -------------------------------------------- |
+| `useGetCourses`              | `getCoursesApi`              | `GET /v1/courses`                            |
+| `useGetCourseById`           | `getCourseByIdApi`           | `GET /v1/courses/:id`                        |
+| `useCreateCourse`            | `createCourseApi`            | `POST /v1/courses`                           |
+| `usePatchCourse`             | `patchCourseApi`             | `PATCH /v1/courses/:id`                      |
+| `useBulkDeleteCourses`       | `bulkDeleteCoursesApi`       | `DELETE /v1/courses`                         |
+| `useAddSubjectsToCourse`     | `addSubjectsToCourseApi`     | `POST /v1/courses/:id/subjects`              |
+| `useRemoveSubjectFromCourse` | `removeSubjectFromCourseApi` | `DELETE /v1/courses/:id/subjects/:subjectId` |
 
 ---
 

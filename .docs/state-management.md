@@ -90,40 +90,41 @@ All 42+ hooks live in `hooks/api/`. Each wraps a single API call with `useQuery`
 
 ### Mutation Hooks (writes)
 
-| Hook                     | Action                    | Invalidates                                                        |
-| ------------------------ | ------------------------- | ------------------------------------------------------------------ |
-| **Courses**              |                           |                                                                    |
-| `useCreateCourse`        | Create course             | `courseKeys.lists()`                                               |
-| `usePatchCourse`         | Update course             | `courseKeys.lists()`, `courseKeys.detail(id)`                      |
-| `useBulkDeleteCourses`   | Delete multiple courses   | `courseKeys.lists()`                                               |
-| `useAddSubjectsToCourse` | Add subjects to course    | `courseKeys.detail(id)`                                            |
-| **Students**             |                           |                                                                    |
-| `useCreateStudent`       | Create student            | `studentKeys.lists()`                                              |
-| `usePatchStudent`        | Update student            | `studentKeys.lists()`, `studentKeys.detail(id)`                    |
-| `useBulkDeleteStudents`  | Delete multiple students  | `studentKeys.lists()`                                              |
-| `useImportStudents`      | CSV import                | `studentKeys.lists()`                                              |
-| `useExportStudents`      | Download export           | _(no invalidation — blob download)_                                |
-| **Subjects**             |                           |                                                                    |
-| `useCreateSubject`       | Create subject            | `subjectKeys.lists()`                                              |
-| `usePatchSubject`        | Update subject            | `subjectKeys.lists()`, `subjectKeys.detail(id)`                    |
-| `useBulkDeleteSubjects`  | Delete multiple subjects  | `subjectKeys.lists()`                                              |
-| `useAddPrerequisite`     | Add prerequisite link     | `subjectKeys.prerequisites(id)`                                    |
-| `useRemovePrerequisite`  | Remove prerequisite link  | `subjectKeys.prerequisites(id)`                                    |
-| **Grades**               |                           |                                                                    |
-| `useCreateGrade`         | Create/upsert grade       | `gradeKeys.lists()`                                                |
-| `usePatchGrade`          | Update grade              | `gradeKeys.lists()`                                                |
-| **Users**                |                           |                                                                    |
-| `useCreateUser`          | Create user               | `userKeys.lists()`                                                 |
-| `usePatchUser`           | Update user               | `userKeys.lists()`, `userKeys.detail(id)`                          |
-| `useSoftDeleteUser`      | Deactivate user           | `userKeys.lists()`                                                 |
-| `useHardDeleteUser`      | Delete permanently        | `userKeys.lists()`                                                 |
-| **Student Reservations** |                           |                                                                    |
-| `useReserveSubject`      | Create reservation        | `studentKeys.detail(id)`                                           |
-| `useUnreserveSubject`    | Cancel reservation        | `studentKeys.detail(id)`                                           |
-| `usePatchReservation`    | Update reservation status | `studentKeys.detail(id)`                                           |
-| **Student Me**           |                           |                                                                    |
-| `useReserveMe`           | Reserve own subject       | `meStudentKeys.reservations()`, `meStudentKeys.eligibleSubjects()` |
-| `useUnreserveMe`         | Cancel own reservation    | `meStudentKeys.reservations()`, `meStudentKeys.eligibleSubjects()` |
+| Hook                         | Action                     | Invalidates                                                        |
+| ---------------------------- | -------------------------- | ------------------------------------------------------------------ |
+| **Courses**                  |                            |                                                                    |
+| `useCreateCourse`            | Create course              | `courseKeys.lists()`                                               |
+| `usePatchCourse`             | Update course              | `courseKeys.lists()`, `courseKeys.detail(id)`                      |
+| `useBulkDeleteCourses`       | Delete multiple courses    | `courseKeys.lists()`                                               |
+| `useAddSubjectsToCourse`     | Add subjects to course     | `courseKeys.detail(id)`                                            |
+| `useRemoveSubjectFromCourse` | Remove subject from course | `courseKeys.detail(id)`                                            |
+| **Students**                 |                            |                                                                    |
+| `useCreateStudent`           | Create student             | `studentKeys.lists()`                                              |
+| `usePatchStudent`            | Update student             | `studentKeys.lists()`, `studentKeys.detail(id)`                    |
+| `useBulkDeleteStudents`      | Delete multiple students   | `studentKeys.lists()`                                              |
+| `useImportStudents`          | CSV import                 | `studentKeys.lists()`                                              |
+| `useExportStudents`          | Download export            | _(no invalidation — blob download)_                                |
+| **Subjects**                 |                            |                                                                    |
+| `useCreateSubject`           | Create subject             | `subjectKeys.lists()`                                              |
+| `usePatchSubject`            | Update subject             | `subjectKeys.lists()`, `subjectKeys.detail(id)`                    |
+| `useBulkDeleteSubjects`      | Delete multiple subjects   | `subjectKeys.lists()`                                              |
+| `useAddPrerequisite`         | Add prerequisite link      | `subjectKeys.prerequisites(id)`                                    |
+| `useRemovePrerequisite`      | Remove prerequisite link   | `subjectKeys.prerequisites(id)`                                    |
+| **Grades**                   |                            |                                                                    |
+| `useCreateGrade`             | Create/upsert grade        | `gradeKeys.lists()`                                                |
+| `usePatchGrade`              | Update grade               | `gradeKeys.lists()`                                                |
+| **Users**                    |                            |                                                                    |
+| `useCreateUser`              | Create user                | `userKeys.lists()`                                                 |
+| `usePatchUser`               | Update user                | `userKeys.lists()`, `userKeys.detail(id)`                          |
+| `useSoftDeleteUser`          | Deactivate user            | `userKeys.lists()`                                                 |
+| `useHardDeleteUser`          | Delete permanently         | `userKeys.lists()`                                                 |
+| **Student Reservations**     |                            |                                                                    |
+| `useReserveSubject`          | Create reservation         | `studentKeys.detail(id)`                                           |
+| `useUnreserveSubject`        | Cancel reservation         | `studentKeys.detail(id)`                                           |
+| `usePatchReservation`        | Update reservation status  | `studentKeys.detail(id)`                                           |
+| **Student Me**               |                            |                                                                    |
+| `useReserveMe`               | Reserve own subject        | `meStudentKeys.reservations()`, `meStudentKeys.eligibleSubjects()` |
+| `useUnreserveMe`             | Cancel own reservation     | `meStudentKeys.reservations()`, `meStudentKeys.eligibleSubjects()` |
 
 ---
 

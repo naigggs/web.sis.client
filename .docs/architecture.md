@@ -85,6 +85,7 @@ ThemeProvider
 | `/courses/[id]/edit`      | `app/(app)/courses/[id]/edit/page.tsx`      | Admin                   |
 | `/subjects`               | `app/(app)/subjects/page.tsx`               | Admin                   |
 | `/subjects/create`        | `app/(app)/subjects/create/page.tsx`        | Admin                   |
+| `/subjects/[id]`          | `app/(app)/subjects/[id]/page.tsx`          | Admin                   |
 | `/subjects/[id]/edit`     | `app/(app)/subjects/[id]/edit/page.tsx`     | Admin                   |
 | `/subjects/prerequisites` | `app/(app)/subjects/prerequisites/page.tsx` | Admin                   |
 | `/grades`                 | `app/(app)/grades/page.tsx`                 | Admin, Staff            |

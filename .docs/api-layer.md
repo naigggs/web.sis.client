@@ -92,14 +92,15 @@ Selection logic: `production` → PROD, `staging` → STAGING, else → DEV.
 
 ### Courses (`api-calls/course/`)
 
-| Function                 | Method | Endpoint                   | Description                           |
-| ------------------------ | ------ | -------------------------- | ------------------------------------- |
-| `getCoursesApi`          | GET    | `/v1/courses`              | List courses (search, pagination)     |
-| `createCourseApi`        | POST   | `/v1/courses`              | Create course                         |
-| `getCourseByIdApi`       | GET    | `/v1/courses/:id`          | Get course detail (includes subjects) |
-| `patchCourseApi`         | PATCH  | `/v1/courses/:id`          | Update course                         |
-| `bulkDeleteCoursesApi`   | DELETE | `/v1/courses`              | Bulk delete (body: `{ ids }`)         |
-| `addSubjectsToCourseApi` | POST   | `/v1/courses/:id/subjects` | Add subjects to course                |
+| Function                     | Method | Endpoint                              | Description                           |
+| ---------------------------- | ------ | ------------------------------------- | ------------------------------------- |
+| `getCoursesApi`              | GET    | `/v1/courses`                         | List courses (search, pagination)     |
+| `createCourseApi`            | POST   | `/v1/courses`                         | Create course                         |
+| `getCourseByIdApi`           | GET    | `/v1/courses/:id`                     | Get course detail (includes subjects) |
+| `patchCourseApi`             | PATCH  | `/v1/courses/:id`                     | Update course                         |
+| `bulkDeleteCoursesApi`       | DELETE | `/v1/courses`                         | Bulk delete (body: `{ ids }`)         |
+| `addSubjectsToCourseApi`     | POST   | `/v1/courses/:id/subjects`            | Add subjects to course                |
+| `removeSubjectFromCourseApi` | DELETE | `/v1/courses/:id/subjects/:subjectId` | Remove a subject from course          |
 
 ### Subjects (`api-calls/subject/`)
 

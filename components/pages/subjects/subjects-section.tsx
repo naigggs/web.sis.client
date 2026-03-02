@@ -7,6 +7,7 @@ import {
   IconPlus,
   IconSearch,
   IconTrash,
+  IconEye,
   IconPencil,
   IconLoader2,
   IconFilter,
@@ -447,6 +448,14 @@ export function SubjectsSection() {
                     {/* Actions */}
                     <TableCell className="text-right pr-4">
                       <div className="flex items-center justify-end gap-1">
+                        <Button
+                          size="icon-sm"
+                          variant="ghost"
+                          onClick={() => router.push(`/subjects/${subject.id}`)}
+                          aria-label="View subject"
+                        >
+                          <IconEye className="h-4 w-4" />
+                        </Button>
                         <Button
                           size="icon-sm"
                           variant="ghost"
