@@ -45,12 +45,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
       {...props}
     >
-      <SidebarHeader>
+      <SidebarHeader className="border-b border-sidebar-border bg-linear-to-r from-primary/10 to-sidebar">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/dashboard">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg overflow-hidden">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg overflow-hidden bg-primary/10 ring-1 ring-primary/20">
                   <Image
                     src="/logo/logo.png"
                     alt="Logo"
@@ -60,7 +60,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">SIS</span>
+                  <span className="truncate font-semibold">EduNest</span>
                   <span className="truncate text-xs">
                     School Information System
                   </span>

@@ -21,51 +21,8 @@ import {
   CardHeader,
   CardTitle,
   Separator,
-  Skeleton,
 } from "@/components/ui";
-
-interface StatCardProps {
-  label: string;
-  value: number | undefined;
-  isLoading: boolean;
-  icon: React.ReactNode;
-  description?: string;
-  iconBg?: string;
-}
-
-function StatCard({
-  label,
-  value,
-  isLoading,
-  icon,
-  description,
-  iconBg = "bg-muted text-muted-foreground",
-}: StatCardProps) {
-  return (
-    <Card className="transition-shadow hover:shadow-md">
-      <CardContent className="pt-5">
-        <div className="flex items-start justify-between mb-4">
-          <div className="space-y-0.5">
-            <span className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
-              {label}
-            </span>
-            {isLoading ? (
-              <Skeleton className="h-8 w-20 mt-1" />
-            ) : (
-              <p className="text-3xl font-bold tabular-nums">
-                {value?.toLocaleString() ?? "—"}
-              </p>
-            )}
-          </div>
-          <div className={`p-2.5 rounded-xl ${iconBg}`}>{icon}</div>
-        </div>
-        {description && (
-          <p className="text-xs text-muted-foreground">{description}</p>
-        )}
-      </CardContent>
-    </Card>
-  );
-}
+import { StatCard } from "@/components/shared/stat-card";
 
 interface Props {
   user: UserResponse;
@@ -103,34 +60,34 @@ export function StaffDashboard({ user }: Props) {
         </div>
         <p className="text-muted-foreground text-sm">
           Welcome back, <span className="font-medium">{user.email}</span>.
-          Here's an overview of your scope.
+          Here&apos;s an overview of your scope.
         </p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <StatCard
-          label="Total Students"
+          title="Total Students"
           value={totalStudents}
-          isLoading={studentsLoading}
+          loading={studentsLoading}
           icon={<IconUsers className="h-4 w-4" />}
-          iconBg="bg-blue-500/10 text-blue-600 dark:text-blue-400"
+          tone="sky"
           description="Registered students"
         />
         <StatCard
-          label="Total Subjects"
+          title="Total Subjects"
           value={totalSubjects}
-          isLoading={subjectsLoading}
+          loading={subjectsLoading}
           icon={<IconBook2 className="h-4 w-4" />}
-          iconBg="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+          tone="emerald"
           description="Subjects across all courses"
         />
         <StatCard
-          label="Grade Records"
+          title="Grade Records"
           value={totalGrades}
-          isLoading={gradesLoading}
+          loading={gradesLoading}
           icon={<IconChartBar className="h-4 w-4" />}
-          iconBg="bg-amber-500/10 text-amber-600 dark:text-amber-400"
+          tone="amber"
           description="Total grade entries"
         />
       </div>

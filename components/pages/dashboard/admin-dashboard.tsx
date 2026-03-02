@@ -25,51 +25,8 @@ import {
   CardHeader,
   CardTitle,
   Separator,
-  Skeleton,
 } from "@/components/ui";
-
-interface StatCardProps {
-  label: string;
-  value: number | undefined;
-  isLoading: boolean;
-  icon: React.ReactNode;
-  description?: string;
-  iconBg?: string;
-}
-
-function StatCard({
-  label,
-  value,
-  isLoading,
-  icon,
-  description,
-  iconBg = "bg-muted text-muted-foreground",
-}: StatCardProps) {
-  return (
-    <Card className="transition-shadow hover:shadow-md">
-      <CardContent className="pt-5">
-        <div className="flex items-start justify-between mb-4">
-          <div className="space-y-0.5">
-            <span className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
-              {label}
-            </span>
-            {isLoading ? (
-              <Skeleton className="h-8 w-20 mt-1" />
-            ) : (
-              <p className="text-3xl font-bold tabular-nums">
-                {value?.toLocaleString() ?? "—"}
-              </p>
-            )}
-          </div>
-          <div className={`p-2.5 rounded-xl ${iconBg}`}>{icon}</div>
-        </div>
-        {description && (
-          <p className="text-xs text-muted-foreground">{description}</p>
-        )}
-      </CardContent>
-    </Card>
-  );
-}
+import { StatCard } from "@/components/shared/stat-card";
 
 interface Props {
   user: UserResponse;
@@ -113,7 +70,7 @@ export function AdminDashboard({ user }: Props) {
           </div>
           <p className="text-muted-foreground text-sm">
             Welcome back, <span className="font-medium">{user.email}</span>.
-            Here's an overview of the system.
+            Here&apos;s an overview of the system.
           </p>
         </div>
       </div>
@@ -121,35 +78,35 @@ export function AdminDashboard({ user }: Props) {
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatCard
-          label="Total Students"
+          title="Total Students"
           value={totalStudents}
-          isLoading={studentsLoading}
+          loading={studentsLoading}
           icon={<IconUsers className="h-4 w-4" />}
-          iconBg="bg-blue-500/10 text-blue-600 dark:text-blue-400"
+          tone="sky"
           description="Registered students"
         />
         <StatCard
-          label="Total Courses"
+          title="Total Courses"
           value={totalCourses}
-          isLoading={coursesLoading}
+          loading={coursesLoading}
           icon={<IconBook className="h-4 w-4" />}
-          iconBg="bg-violet-500/10 text-violet-600 dark:text-violet-400"
+          tone="teal"
           description="Available degree programs"
         />
         <StatCard
-          label="Total Subjects"
+          title="Total Subjects"
           value={totalSubjects}
-          isLoading={subjectsLoading}
+          loading={subjectsLoading}
           icon={<IconBook2 className="h-4 w-4" />}
-          iconBg="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+          tone="emerald"
           description="Subjects across all courses"
         />
         <StatCard
-          label="Total Users"
+          title="Total Users"
           value={totalUsers}
-          isLoading={usersLoading}
+          loading={usersLoading}
           icon={<IconUserCog className="h-4 w-4" />}
-          iconBg="bg-orange-500/10 text-orange-600 dark:text-orange-400"
+          tone="amber"
           description="System accounts"
         />
       </div>

@@ -1,14 +1,14 @@
+import { type ComponentType } from "react";
 import {
-  BookOpen,
-  CalendarCheck,
-  FileSpreadsheet,
-  GraduationCap,
-  Layers,
-  UserCircle,
-  Users,
-  type LucideIcon,
-  LayoutDashboard,
-} from "lucide-react";
+  IconBook2,
+  IconCalendarCheck,
+  IconFileSpreadsheet,
+  IconSchool,
+  IconLayoutDashboard,
+  IconLayersIntersect,
+  IconUser,
+  IconUsers,
+} from "@tabler/icons-react";
 
 export type NavRole = "admin" | "staff" | "student";
 
@@ -20,16 +20,17 @@ export interface NavSubItem {
 export interface NavMainItem {
   title: string;
   url: string;
-  icon: LucideIcon;
+  icon: ComponentType<{ className?: string }>;
   isActive?: boolean;
   roles: NavRole[];
+  group: "overview" | "academic" | "management" | "personal";
   items?: NavSubItem[];
 }
 
 export const data = {
   user: {
-    name: "Admin",
-    email: "admin@sis.edu",
+    name: "EduNest Admin",
+    email: "admin@edunest.edu",
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
@@ -37,14 +38,16 @@ export const data = {
     {
       title: "Dashboard",
       url: "/dashboard",
-      icon: LayoutDashboard,
+      icon: IconLayoutDashboard,
       roles: ["admin"] as NavRole[],
+      group: "overview",
     },
     {
       title: "Students",
       url: "/students",
-      icon: GraduationCap,
+      icon: IconSchool,
       roles: ["admin"] as NavRole[],
+      group: "academic",
       isActive: true,
       items: [
         { title: "All Students", url: "/students" },
@@ -54,8 +57,9 @@ export const data = {
     {
       title: "Courses",
       url: "/courses",
-      icon: BookOpen,
+      icon: IconBook2,
       roles: ["admin"] as NavRole[],
+      group: "academic",
       isActive: true,
       items: [
         { title: "All Courses", url: "/courses" },
@@ -65,8 +69,9 @@ export const data = {
     {
       title: "Subjects",
       url: "/subjects",
-      icon: Layers,
+      icon: IconLayersIntersect,
       roles: ["admin"] as NavRole[],
+      group: "academic",
       isActive: true,
       items: [
         { title: "All Subjects", url: "/subjects" },
@@ -77,35 +82,40 @@ export const data = {
     {
       title: "Reservations",
       url: "/reservations",
-      icon: CalendarCheck,
+      icon: IconCalendarCheck,
       roles: ["admin"] as NavRole[],
+      group: "management",
     },
     {
       title: "Users",
       url: "/users",
-      icon: Users,
+      icon: IconUsers,
       roles: ["admin"] as NavRole[],
+      group: "management",
     },
     // ── Admin + Staff ─────────────────────────────────────────────────
     {
       title: "Grading Sheet",
       url: "/grades",
-      icon: FileSpreadsheet,
+      icon: IconFileSpreadsheet,
       roles: ["admin", "staff"] as NavRole[],
+      group: "academic",
     },
     // ── Student ───────────────────────────────────────────────────────
     {
       title: "My Enrollment",
       url: "/enrollment",
-      icon: CalendarCheck,
+      icon: IconCalendarCheck,
       roles: ["student"] as NavRole[],
+      group: "personal",
       items: [{ title: "Enrollment Table", url: "/enrollment" }],
     },
     {
       title: "My Profile",
       url: "/profile",
-      icon: UserCircle,
+      icon: IconUser,
       roles: ["student"] as NavRole[],
+      group: "personal",
       items: [{ title: "Profile", url: "/profile" }],
     },
   ] satisfies NavMainItem[],

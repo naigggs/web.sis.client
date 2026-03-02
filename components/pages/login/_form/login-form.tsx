@@ -54,13 +54,13 @@ export function LoginForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className="shadow-lg border-border/60">
+      <Card className="rounded-2xl border-border/60 shadow-lg">
         <CardHeader className="pb-4 text-center space-y-3">
           <div className="flex justify-center">
             <div className="flex size-12 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/20">
               <Image
                 src="/logo/logo.png"
-                alt="SIS"
+                alt="EduNest"
                 width={28}
                 height={28}
                 className="object-contain"
@@ -68,7 +68,12 @@ export function LoginForm({
             </div>
           </div>
           <div className="space-y-1">
-            <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary/80">
+              Welcome to EduNest
+            </p>
+            <CardTitle className="text-2xl font-bold">
+              Welcome back 👋
+            </CardTitle>
             <CardDescription>
               Sign in to your account to continue
             </CardDescription>
@@ -125,8 +130,7 @@ export function LoginForm({
         </CardContent>
       </Card>
       <p className="text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} School Information System. All rights
-        reserved.
+        © {new Date().getFullYear()} EduNest. All rights reserved.
       </p>
     </div>
   );

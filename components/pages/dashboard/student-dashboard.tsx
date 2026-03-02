@@ -5,10 +5,6 @@ import {
   IconCalendarCheck,
   IconBook2,
   IconChartBar,
-  IconCircleCheck,
-  IconCircleX,
-  IconClock,
-  IconAlertTriangle,
 } from "@tabler/icons-react";
 
 import { useGetMeStudent } from "@/hooks/api/student/me/use-get-me-student";
@@ -36,79 +32,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui";
-
-function ReservationStatusBadge({ status }: { status: ReservationStatus }) {
-  if (status === "RESERVED")
-    return (
-      <Badge className="text-xs gap-1 bg-blue-600/15 text-blue-700 border-blue-600/20 dark:text-blue-400 hover:bg-blue-600/15">
-        <IconClock className="h-3 w-3" />
-        Reserved
-      </Badge>
-    );
-  if (status === "APPROVED")
-    return (
-      <Badge className="text-xs gap-1 bg-green-600/15 text-green-700 border-green-600/20 dark:text-green-400 hover:bg-green-600/15">
-        <IconCircleCheck className="h-3 w-3" />
-        Approved
-      </Badge>
-    );
-  if (status === "DENIED")
-    return (
-      <Badge variant="destructive" className="text-xs gap-1">
-        <IconCircleX className="h-3 w-3" />
-        Denied
-      </Badge>
-    );
-  return (
-    <Badge variant="secondary" className="text-xs gap-1">
-      <IconAlertTriangle className="h-3 w-3" />
-      Cancelled
-    </Badge>
-  );
-}
-
-interface StatCardProps {
-  label: string;
-  value: number | undefined;
-  isLoading: boolean;
-  icon: React.ReactNode;
-  description?: string;
-  iconBg?: string;
-}
-
-function StatCard({
-  label,
-  value,
-  isLoading,
-  icon,
-  description,
-  iconBg = "bg-muted text-muted-foreground",
-}: StatCardProps) {
-  return (
-    <Card className="transition-shadow hover:shadow-md">
-      <CardContent className="pt-5">
-        <div className="flex items-start justify-between mb-4">
-          <div className="space-y-0.5">
-            <span className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
-              {label}
-            </span>
-            {isLoading ? (
-              <Skeleton className="h-8 w-20 mt-1" />
-            ) : (
-              <p className="text-3xl font-bold tabular-nums">
-                {value?.toLocaleString() ?? "—"}
-              </p>
-            )}
-          </div>
-          <div className={`p-2.5 rounded-xl ${iconBg}`}>{icon}</div>
-        </div>
-        {description && (
-          <p className="text-xs text-muted-foreground">{description}</p>
-        )}
-      </CardContent>
-    </Card>
-  );
-}
+import { StatusBadge } from "@/components/shared/status-badge";
+import { StatCard } from "@/components/shared/stat-card";
 
 interface Props {
   user: UserResponse;
@@ -166,27 +91,27 @@ export function StudentDashboard({ user }: Props) {
       {/* Stats */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <StatCard
-          label="Active Reservations"
+          title="Active Reservations"
           value={activeReservations.length}
-          isLoading={reservationsLoading}
+          loading={reservationsLoading}
           icon={<IconCalendarCheck className="h-4 w-4" />}
-          iconBg="bg-sky-500/10 text-sky-600 dark:text-sky-400"
+          tone="sky"
           description="Reserved or approved subjects"
         />
         <StatCard
-          label="Grades Received"
+          title="Grades Received"
           value={gradedCount}
-          isLoading={meLoading}
+          loading={meLoading}
           icon={<IconChartBar className="h-4 w-4" />}
-          iconBg="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+          tone="emerald"
           description="Subjects with final grade"
         />
         <StatCard
-          label="Eligible Subjects"
+          title="Eligible Subjects"
           value={eligibleCount}
-          isLoading={eligibleLoading}
+          loading={eligibleLoading}
           icon={<IconBook2 className="h-4 w-4" />}
-          iconBg="bg-violet-500/10 text-violet-600 dark:text-violet-400"
+          tone="teal"
           description="Subjects you can enroll in"
         />
       </div>
@@ -246,7 +171,10 @@ export function StudentDashboard({ user }: Props) {
                     </TableCell>
                     <TableCell>{r.subject.units}</TableCell>
                     <TableCell>
-                      <ReservationStatusBadge status={r.status} />
+                      <StatusBadge
+                        kind="reservation"
+                        status={r.status as ReservationStatus}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}

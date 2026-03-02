@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { IconMoon, IconSun, IconDeviceDesktop } from "@tabler/icons-react";
+import { useTheme } from "next-themes";
 
 import {
   Card,
@@ -15,24 +16,6 @@ import { cn } from "@/lib/utils";
 
 type Theme = "light" | "dark" | "system";
 
-function getStoredTheme(): Theme {
-  if (typeof window === "undefined") return "system";
-  return (localStorage.getItem("theme") as Theme) ?? "system";
-}
-
-function applyTheme(theme: Theme) {
-  const root = document.documentElement;
-  if (theme === "system") {
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    ).matches;
-    root.classList.toggle("dark", prefersDark);
-  } else {
-    root.classList.toggle("dark", theme === "dark");
-  }
-  localStorage.setItem("theme", theme);
-}
-
 const THEMES: { value: Theme; label: string; icon: React.ReactNode }[] = [
   { value: "light", label: "Light", icon: <IconSun className="h-5 w-5" /> },
   { value: "dark", label: "Dark", icon: <IconMoon className="h-5 w-5" /> },
@@ -44,16 +27,14 @@ const THEMES: { value: Theme; label: string; icon: React.ReactNode }[] = [
 ];
 
 export default function SettingsPage() {
-  const [theme, setTheme] = React.useState<Theme>("system");
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
-    setTheme(getStoredTheme());
+    setMounted(true);
   }, []);
 
-  const handleThemeChange = (next: Theme) => {
-    setTheme(next);
-    applyTheme(next);
-  };
+  const currentTheme = (theme as Theme) ?? "system";
 
   return (
     <div className="flex flex-col gap-6 p-6 max-w-2xl">
@@ -82,11 +63,12 @@ export default function SettingsPage() {
                 <button
                   key={value}
                   type="button"
-                  onClick={() => handleThemeChange(value)}
+                  onClick={() => setTheme(value)}
+                  disabled={!mounted}
                   className={cn(
                     "flex flex-col items-center justify-center gap-2 rounded-xl border p-4 text-sm font-medium transition-colors",
                     "hover:bg-muted cursor-pointer",
-                    theme === value
+                    currentTheme === value
                       ? "border-primary bg-primary/5 text-primary"
                       : "border-border text-muted-foreground",
                   )}

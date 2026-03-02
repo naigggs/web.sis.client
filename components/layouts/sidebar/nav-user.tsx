@@ -2,12 +2,12 @@
 
 import { ChevronsUpDown, LogOut, Settings, UserCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
+  Badge,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -31,13 +31,8 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
-  const { signOut } = useAuth();
+  const { signOut, user: authedUser } = useAuth();
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const initials = user.name
     .split(" ")
@@ -46,24 +41,8 @@ export function NavUser({
     .slice(0, 2)
     .toUpperCase();
 
-  if (!mounted) {
-    return (
-      <SidebarMenu>
-        <SidebarMenuItem>
-          <SidebarMenuButton size="lg" className="pointer-events-none">
-            <Avatar className="h-8 w-8 rounded-lg">
-              <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
-            </Avatar>
-            <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-medium">{user.name}</span>
-              <span className="truncate text-xs">{user.email}</span>
-            </div>
-            <ChevronsUpDown className="ml-auto size-4" />
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-      </SidebarMenu>
-    );
-  }
+  const role = authedUser?.role ?? "admin";
+  const roleLabel = role.charAt(0).toUpperCase() + role.slice(1);
 
   return (
     <SidebarMenu>
@@ -82,7 +61,12 @@ export function NavUser({
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="truncate text-xs">{user.email}</span>
+                  <Badge variant="outline" className="h-4 px-1.5 text-[10px]">
+                    {roleLabel}
+                  </Badge>
+                </div>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -103,7 +87,15 @@ export function NavUser({
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user.name}</span>
-                  <span className="truncate text-xs">{user.email}</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="truncate text-xs">{user.email}</span>
+                    <Badge
+                      variant="outline"
+                      className="h-4 w-fit px-1.5 text-[10px]"
+                    >
+                      {roleLabel}
+                    </Badge>
+                  </div>
                 </div>
               </div>
             </DropdownMenuLabel>

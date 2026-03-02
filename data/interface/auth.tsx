@@ -14,7 +14,7 @@ export interface MeData {
   user: UserResponse;
 }
 
-export interface LogoutData {}
+export type LogoutData = Record<string, never>;
 
 export type LoginResponse = ApiResponse<LoginData>;
 export type RefreshResponse = ApiResponse<LoginData>;
