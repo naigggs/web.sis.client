@@ -13,8 +13,18 @@ export async function getSubjectsApi(
   if (params.page) searchParams.set("page", String(params.page));
   if (params.limit) searchParams.set("limit", String(params.limit));
   if (params.search) searchParams.set("search", params.search);
-  const course = params.course ?? params.courseId;
-  if (course) searchParams.set("course", course);
+  const courseIds = params.courseId ?? params.course;
+  if (Array.isArray(courseIds)) {
+    if (courseIds.length === 1) {
+      searchParams.set("courseId", courseIds[0]);
+    } else if (courseIds.length > 1) {
+      courseIds.forEach((courseId) =>
+        searchParams.append("courseId[]", courseId),
+      );
+    }
+  } else if (courseIds) {
+    searchParams.set("courseId", courseIds);
+  }
 
   const query = searchParams.toString();
   const res = await fetch(`${API_URL}/v1/subjects${query ? `?${query}` : ""}`, {

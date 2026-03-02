@@ -87,9 +87,9 @@ export function SubjectsSection() {
     page,
     limit: 20,
     search: debouncedSearch || undefined,
-    course:
-      selectedCourseIds.size === 1
-        ? Array.from(selectedCourseIds)[0]
+    courseId:
+      selectedCourseIds.size > 0
+        ? Array.from(selectedCourseIds).sort()
         : undefined,
   });
   const subjects = data?.subjects ?? [];
