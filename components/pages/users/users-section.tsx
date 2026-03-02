@@ -449,12 +449,10 @@ export function UsersSection() {
     page,
     limit: 20,
     search: debouncedSearch || undefined,
+    roles: selectedRoles.size ? Array.from(selectedRoles) : undefined,
   });
   const allUsers = data?.users ?? [];
-  const users =
-    selectedRoles.size > 0
-      ? allUsers.filter((u) => selectedRoles.has(u.role))
-      : allUsers;
+  const users = allUsers;
   const pagination = data?.pagination;
 
   const ROLES: UserResponse["role"][] = ["admin", "staff", "student"];
@@ -474,7 +472,7 @@ export function UsersSection() {
   React.useEffect(() => {
     setPage(1);
     setSelectedIds(new Set());
-  }, [debouncedSearch]);
+  }, [debouncedSearch, selectedRoles]);
 
   // Selection
   const allSelected =
@@ -564,12 +562,12 @@ export function UsersSection() {
       </div>
 
       {/* Toolbar */}
-      <div className="flex items-center gap-3 flex-wrap">
-        <div className="relative flex-1 min-w-48">
-          <IconSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+      <div className="flex items-center gap-2 flex-wrap">
+        <div className="relative flex-1 max-w-sm">
+          <IconSearch className="text-muted-foreground absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 pointer-events-none" />
           <Input
             className="pl-9"
-            placeholder="Search by email…"
+            placeholder="Search by email..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />

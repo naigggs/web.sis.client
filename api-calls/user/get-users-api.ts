@@ -13,6 +13,11 @@ export async function getUsersApi(
   if (params.page) searchParams.set("page", String(params.page));
   if (params.limit) searchParams.set("limit", String(params.limit));
   if (params.search) searchParams.set("search", params.search);
+  if (params.roles?.length === 1) {
+    searchParams.set("role", params.roles[0]);
+  } else if (params.roles?.length) {
+    params.roles.forEach((role) => searchParams.append("role[]", role));
+  }
 
   const query = searchParams.toString();
   const res = await fetch(`${API_URL}/v1/users${query ? `?${query}` : ""}`, {

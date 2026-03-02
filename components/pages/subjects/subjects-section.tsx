@@ -86,7 +86,7 @@ export function SubjectsSection() {
     page,
     limit: 20,
     search: debouncedSearch || undefined,
-    courseId:
+    course:
       selectedCourseIds.size === 1
         ? Array.from(selectedCourseIds)[0]
         : undefined,

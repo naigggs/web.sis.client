@@ -27,6 +27,7 @@ export interface GetSubjectsParams {
   page?: number;
   limit?: number;
   search?: string;
+  course?: string;
   courseId?: string;
 }
 

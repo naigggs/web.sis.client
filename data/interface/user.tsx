@@ -15,6 +15,7 @@ export interface GetUsersParams {
   page?: number;
   limit?: number;
   search?: string;
+  roles?: Array<UserResponse["role"]>;
 }
 
 export interface GetUsersData {
