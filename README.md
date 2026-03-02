@@ -1,36 +1,149 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EduNest — School Information System
 
-## Getting Started
+A full-featured **School Information System** (SIS) built with **Next.js 16**, **React 19**, and **TanStack React Query**. EduNest provides a modern, role-aware campus workspace for administrators, staff, and students to manage enrollment, courses, subjects, prerequisites, reservations, grading, and more.
 
-First, run the development server:
+> **Built for:** Web Developer Practical Exam — Mini SIS
+
+---
+
+## Tech Stack
+
+| Layer               | Technology                                                                        |
+| ------------------- | --------------------------------------------------------------------------------- |
+| **Framework**       | [Next.js 16](https://nextjs.org) (App Router, Turbopack)                          |
+| **UI**              | React 19, Tailwind CSS 4, [Radix UI](https://www.radix-ui.com) (shadcn/ui)        |
+| **State & Data**    | [TanStack React Query v5](https://tanstack.com/query)                             |
+| **Icons**           | [@tabler/icons-react](https://tabler.io/icons), [Lucide](https://lucide.dev)      |
+| **Theming**         | [next-themes](https://github.com/pacocoursey/next-themes) (light / dark / system) |
+| **Notifications**   | [Sonner](https://sonner.emilkowal.ski)                                            |
+| **Command Palette** | [cmdk](https://cmdk.paco.me)                                                      |
+| **Auth**            | Cookie + localStorage dual persistence, session-based                             |
+| **Package Manager** | [Bun](https://bun.sh)                                                             |
+| **Language**        | TypeScript 5                                                                      |
+
+---
+
+## Quick Start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# 1. Clone the repository
+git clone <repo-url> && cd sis-client
+
+# 2. Install dependencies
+bun install
+
+# 3. Set environment variables (see .docs/getting-started.md for details)
+cp .env.example .env.local
+# Edit .env.local with your API URL
+
+# 4. Run the dev server (port 4000)
+bun run dev
+
+# 5. Build for production
+bun run build
+
+# 6. Lint
+bun run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Variable                              | Purpose                                  |
+| ------------------------------------- | ---------------------------------------- |
+| `NEXT_PUBLIC_ENVIRONMENT`             | `development` / `staging` / `production` |
+| `NEXT_PUBLIC_DEV_SERVICE_API_URL`     | Backend API URL for development          |
+| `NEXT_PUBLIC_STAGING_SERVICE_API_URL` | Backend API URL for staging              |
+| `NEXT_PUBLIC_PROD_SERVICE_API_URL`    | Backend API URL for production           |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Seed Credentials
 
-## Learn More
+| Role  | Email               | Password             |
+| ----- | ------------------- | -------------------- |
+| Admin | `admin@edunest.edu` | _(see backend seed)_ |
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Key Assumptions & Validation Rules
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Prerequisite satisfaction:** A prerequisite is considered "passed" when a `grades` row exists with `remarks = 'PASSED'` (i.e., `final_grade >= passing threshold`).
+- **Reservation rule:** A student can only reserve subjects in their own course, and **all** prerequisites must be satisfied first. If not, the server returns `400 Bad Request` with the list of missing prerequisites.
+- **Grade uniqueness:** One grade record per `(student_id, subject_id, course_id)`.
+- **Roles:** `admin` (full access), `staff` (grading only), `student` (enrollment & profile only).
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+sis-client/
+├── app/                    # Next.js App Router
+│   ├── layout.tsx          # Root layout (ThemeProvider → AuthProvider → Toaster)
+│   ├── page.tsx            # Root redirect
+│   ├── (auth)/             # Public route group (login)
+│   └── (app)/              # Protected route group (dashboard, students, etc.)
+├── api-calls/              # API layer — fetch wrappers per entity
+├── components/
+│   ├── layouts/sidebar/    # AppSidebar, SiteHeader, command palette
+│   ├── pages/              # Feature-specific page components
+│   ├── shared/             # Cross-cutting reusable components
+│   └── ui/                 # 48+ shadcn/ui atomic components
+├── config/                 # Environment-aware config (API URLs)
+├── contexts/               # React Contexts (Auth, Sidebar)
+├── data/
+│   ├── interface/          # TypeScript interfaces for all entities
+│   └── sidebar/            # Sidebar navigation data + role tags
+├── hooks/
+│   ├── api/                # 42+ React Query hooks (queries & mutations)
+│   └── ...                 # Utility hooks (useAuth, useDebounce, etc.)
+├── lib/                    # Utilities (cn, fonts, metadata, constants)
+├── providers/              # Context providers (Auth, ReactQuery, Sidebar, Theme)
+├── assets/styles/          # globals.css — OKLCH design tokens
+├── middleware.ts            # Edge middleware — role-based route protection
+└── .docs/                  # 📖 Detailed documentation (you are here)
+```
+
+---
+
+## Documentation
+
+All detailed documentation lives in the `.docs/` folder. Each file covers a specific concern:
+
+### Setup & Architecture
+
+| Document                                    | Description                                                  |
+| ------------------------------------------- | ------------------------------------------------------------ |
+| [Getting Started](.docs/getting-started.md) | Prerequisites, environment setup, dev server, build & lint   |
+| [Architecture](.docs/architecture.md)       | App Router layout chain, provider hierarchy, component tiers |
+| [Styling & Design System](.docs/styling.md) | OKLCH tokens, theme system, fonts, Tailwind CSS 4            |
+
+### Core Systems
+
+| Document                                        | Description                                                               |
+| ----------------------------------------------- | ------------------------------------------------------------------------- |
+| [Authentication](.docs/authentication.md)       | Login flow, cookie/localStorage persistence, 401 interceptor, middleware  |
+| [Role-Based Access](.docs/role-based-access.md) | Three roles, route protection, sidebar filtering, command palette scoping |
+| [API Layer](.docs/api-layer.md)                 | Fetch pattern, environment config, full endpoint reference                |
+| [Data Models](.docs/data-models.md)             | All TypeScript interfaces — entities, params, request/response shapes     |
+| [State Management](.docs/state-management.md)   | React Query setup, query key factories, custom hooks, cache invalidation  |
+| [UI Components](.docs/ui-components.md)         | 48+ component families, shared components, barrel exports                 |
+
+### Features
+
+| Document                                                     | Description                                                       |
+| ------------------------------------------------------------ | ----------------------------------------------------------------- |
+| [Dashboard](.docs/features/dashboard.md)                     | Role-specific dashboards — stats, quick actions, recent students  |
+| [Students](.docs/features/students.md)                       | CRUD, data table, import/export, profile, prerequisite status     |
+| [Courses](.docs/features/courses.md)                         | CRUD, data table, course detail, add subjects to course           |
+| [Subjects](.docs/features/subjects.md)                       | CRUD, data table, prerequisite management, course filtering       |
+| [Grades](.docs/features/grades.md)                           | Digital grading sheet, inline editing, upsert, PASSED/FAILED      |
+| [Reservations](.docs/features/reservations.md)               | Admin reservation management, approve/deny/cancel workflow        |
+| [Enrollment](.docs/features/enrollment.md)                   | Student self-service, eligible subjects, prerequisite enforcement |
+| [Users](.docs/features/users.md)                             | User management, role assignment, soft/hard delete                |
+| [Profile & Settings](.docs/features/profile-and-settings.md) | Student profile, theme settings, account management               |
+| [Command Palette](.docs/features/command-palette.md)         | ⌘K search, role-scoped data indexing, keyboard navigation         |
+
+---
+
+## License
+
+This project was built as part of a practical exam and is not licensed for redistribution.
