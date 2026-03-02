@@ -125,11 +125,12 @@ interface AddUserDialogProps {
 
 function AddUserDialog({ open, onClose }: AddUserDialogProps) {
   const { mutate: createUser, isPending } = useCreateUser();
+  type CreatableRole = "admin" | "staff";
   const [form, setForm] = React.useState({
     email: "",
     password: "",
     confirmPassword: "",
-    role: "staff" as UserResponse["role"],
+    role: "staff" as CreatableRole,
   });
   const [error, setError] = React.useState<string | null>(null);
 
@@ -197,7 +198,7 @@ function AddUserDialog({ open, onClose }: AddUserDialogProps) {
             <Select
               value={form.role}
               onValueChange={(v) =>
-                setForm((f) => ({ ...f, role: v as UserResponse["role"] }))
+                setForm((f) => ({ ...f, role: v as CreatableRole }))
               }
             >
               <SelectTrigger id="add-role">
@@ -206,7 +207,6 @@ function AddUserDialog({ open, onClose }: AddUserDialogProps) {
               <SelectContent>
                 <SelectItem value="admin">Admin</SelectItem>
                 <SelectItem value="staff">Staff</SelectItem>
-                <SelectItem value="student">Student</SelectItem>
               </SelectContent>
             </Select>
           </Field>
