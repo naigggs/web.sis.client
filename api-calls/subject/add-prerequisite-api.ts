@@ -15,7 +15,30 @@ export async function addPrerequisiteApi(
     credentials: "include",
     body: JSON.stringify(payload),
   });
-  if (!res.ok) throw new Error("Add prerequisite failed");
+  if (!res.ok) {
+    let apiMessage = "Failed to add prerequisite.";
+    let apiErrors: string[] = [];
+
+    try {
+      const errorJson: ApiResponse<null> = await res.json();
+      apiMessage = errorJson.message || apiMessage;
+      apiErrors = (errorJson.errors ?? [])
+        .map((error) => error.message)
+        .filter(Boolean);
+    } catch {
+      // Ignore parsing issues and keep fallback message.
+    }
+
+    const error = new Error(apiMessage) as Error & {
+      apiMessage?: string;
+      apiErrors?: string[];
+    };
+
+    error.apiMessage = apiMessage;
+    error.apiErrors = apiErrors;
+
+    throw error;
+  }
   const json: ApiResponse<{ prerequisite: PrerequisiteResponse }> =
     await res.json();
   return json.data!.prerequisite;

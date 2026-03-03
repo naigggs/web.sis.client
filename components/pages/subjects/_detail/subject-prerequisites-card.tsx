@@ -47,6 +47,11 @@ interface Props {
   subjectCode?: string;
 }
 
+type ApiMutationError = Error & {
+  apiMessage?: string;
+  apiErrors?: string[];
+};
+
 export function SubjectPrerequisitesCard({ subjectId, subjectCode }: Props) {
   const {
     data: prerequisites,
@@ -92,7 +97,21 @@ export function SubjectPrerequisitesCard({ subjectId, subjectCode }: Props) {
           setAddSubjectId("");
           setAddSearch("");
         },
-        onError: () => toast.error("Failed to add prerequisite"),
+        onError: (error) => {
+          const apiError = error as ApiMutationError;
+          const message =
+            apiError.apiMessage ||
+            apiError.message ||
+            "Failed to add prerequisite.";
+          const details = (apiError.apiErrors ?? []).join("\n");
+
+          if (details) {
+            toast.error(message, { description: details });
+            return;
+          }
+
+          toast.error(message);
+        },
       },
     );
   };

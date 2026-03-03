@@ -51,6 +51,11 @@ function useDebounce<T>(value: T, delay = 400): T {
 }
 
 export function PrerequisitesSection() {
+  type ApiMutationError = Error & {
+    apiMessage?: string;
+    apiErrors?: string[];
+  };
+
   // ── Subject selector ───────────────────────────────────────────────────────
   const [subjectSearch, setSubjectSearch] = React.useState("");
   const debouncedSubjectSearch = useDebounce(subjectSearch, 350);
@@ -103,7 +108,21 @@ export function PrerequisitesSection() {
           setAddSubjectId("");
           setAddSearch("");
         },
-        onError: () => toast.error("Failed to add prerequisite"),
+        onError: (error) => {
+          const apiError = error as ApiMutationError;
+          const message =
+            apiError.apiMessage ||
+            apiError.message ||
+            "Failed to add prerequisite.";
+          const details = (apiError.apiErrors ?? []).join("\n");
+
+          if (details) {
+            toast.error(message, { description: details });
+            return;
+          }
+
+          toast.error(message);
+        },
       },
     );
   };
