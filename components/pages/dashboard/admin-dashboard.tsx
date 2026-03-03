@@ -27,6 +27,10 @@ import {
   Separator,
 } from "@/components/ui";
 import { StatCard } from "@/components/shared/stat-card";
+import { RecentGradesCard } from "@/components/pages/dashboard/_admin/recent-grades-card";
+import { RecentStudentsCard } from "@/components/pages/dashboard/_admin/recent-students-card";
+import { StudentsByCourseChart } from "@/components/pages/dashboard/_admin/students-by-course-chart";
+import { SubjectsByCourseChart } from "@/components/pages/dashboard/_admin/subjects-by-course-chart";
 
 interface Props {
   user: UserResponse;
@@ -109,6 +113,16 @@ export function AdminDashboard({ user }: Props) {
           tone="amber"
           description="System accounts"
         />
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+        <StudentsByCourseChart />
+        <SubjectsByCourseChart />
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+        <RecentStudentsCard />
+        <RecentGradesCard />
       </div>
 
       {/* Quick Actions */}

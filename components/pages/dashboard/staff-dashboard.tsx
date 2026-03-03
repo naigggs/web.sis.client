@@ -23,6 +23,8 @@ import {
   Separator,
 } from "@/components/ui";
 import { StatCard } from "@/components/shared/stat-card";
+import { RecentGradesCard } from "@/components/pages/dashboard/_admin/recent-grades-card";
+import { StudentsByCourseChart } from "@/components/pages/dashboard/_admin/students-by-course-chart";
 
 interface Props {
   user: UserResponse;
@@ -91,6 +93,10 @@ export function StaffDashboard({ user }: Props) {
           description="Total grade entries"
         />
       </div>
+
+      <StudentsByCourseChart />
+
+      <RecentGradesCard />
 
       {/* Quick Actions */}
       <Card>
