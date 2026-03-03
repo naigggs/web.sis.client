@@ -89,9 +89,10 @@ bun run lint
 
 ### Seed Credentials
 
-| Role  | Email               | Password             |
-| ----- | ------------------- | -------------------- |
-| Admin | `admin@edunest.edu` | _(see backend seed)_ |
+| Role  | Email           | Password    |
+| ----- | --------------- | ----------- |
+| Admin | `admin@sis.edu` | Admin@12345 |
+| Staff | `staff@sis.edu` | Staff@12345 |
 
 ---
 
