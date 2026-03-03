@@ -91,8 +91,8 @@ bun run lint
 
 | Role    | Email             | Password              |
 | ------- | ----------------- | --------------------- |
-| Admin   | `admin@sis.edu`   | Admin@12345           |
-| Staff   | `staff@sis.edu`   | Staff@12345           |
+| Admin   | `admin@sis.edu`   | Admin@1234            |
+| Staff   | `staff@sis.edu`   | Staff@1234            |
 | Student | `<student-email>` | `<student-birthdate>` |
 
 ---
