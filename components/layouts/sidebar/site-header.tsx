@@ -50,6 +50,7 @@ import {
 import { useSidebar } from "@/hooks/use-sidebar";
 import { useGetStudentById } from "@/hooks/api/student/use-get-student-by-id";
 import { useGetCourseById } from "@/hooks/api/course/use-get-course-by-id";
+import { useGetSubjectById } from "@/hooks/api/subject/use-get-subject-by-id";
 import { useAuth } from "@/hooks/use-auth";
 import { data, type NavRole } from "@/data/sidebar/data";
 import { useQuery } from "@tanstack/react-query";
@@ -78,7 +79,7 @@ const SEGMENT_LABELS: Record<string, string> = {
   prerequisites: "Prerequisites",
 };
 
-type EntityType = "student" | "course";
+type EntityType = "student" | "course" | "subject";
 
 interface Crumb {
   segment: string;
@@ -95,6 +96,7 @@ function buildBreadcrumbs(pathname: string): Crumb[] {
     if (!SEGMENT_LABELS[seg.toLowerCase()]) {
       if (parent === "students") entityType = "student";
       else if (parent === "courses") entityType = "course";
+      else if (parent === "subjects") entityType = "subject";
     }
     return {
       segment: seg,
@@ -125,12 +127,24 @@ function CourseLabel({ id }: { id: string }) {
   );
 }
 
+function SubjectLabel({ id }: { id: string }) {
+  const { data } = useGetSubjectById(id);
+  if (!data) return <>{id}</>;
+  return (
+    <>
+      {data.code} – {data.title}
+    </>
+  );
+}
+
 function CrumbLabel({ crumb }: { crumb: Crumb }) {
   const staticLabel =
     SEGMENT_LABELS[crumb.segment.toLowerCase()] ?? crumb.segment;
   if (crumb.entityType === "student")
     return <StudentLabel id={crumb.segment} />;
   if (crumb.entityType === "course") return <CourseLabel id={crumb.segment} />;
+  if (crumb.entityType === "subject")
+    return <SubjectLabel id={crumb.segment} />;
   return <>{staticLabel}</>;
 }
 
