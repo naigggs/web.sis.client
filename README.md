@@ -4,6 +4,38 @@ A full-featured **School Information System** (SIS) built with **Next.js 16**, *
 
 > **Built for:** Web Developer Practical Exam — Mini SIS
 
+> ✨ **Teaser:** Role-aware dashboards, robust student-course-subject workflows, and a modern UI with command palette navigation — all in one polished campus system.
+
+---
+
+## Project Showcase
+
+### Admin Experience
+
+| Screen          | Preview                                                                 |
+| --------------- | ----------------------------------------------------------------------- |
+| Dashboard       | ![Admin Dashboard](assets/medias/admin/dashboard-page.png)              |
+| Students Page   | ![Students Page](assets/medias/admin/students-page.png)                 |
+| Student Detail  | ![Detailed Student Page](assets/medias/admin/detailed-student-page.png) |
+| Courses Page    | ![Courses Page](assets/medias/admin/courses-page.png)                   |
+| Course Detail   | ![Detailed Course Page](assets/medias/admin/detailed-course-page.png)   |
+| Subjects Page   | ![Subjects Page](assets/medias/admin/subjects-page.png)                 |
+| Subject Detail  | ![Detailed Subject Page](assets/medias/admin/detailed-subject-page.png) |
+| Grading Sheet   | ![Grading Sheet](assets/medias/admin/grading-sheet.png)                 |
+| Reservations    | ![Reservation Page](assets/medias/admin/reservation-page.png)           |
+| Users Page      | ![Users Page](assets/medias/admin/users-page.png)                       |
+| Add User Dialog | ![Add User Dialog](assets/medias/admin/add-user-dialog.png)             |
+| Command Palette | ![Command Palette](assets/medias/admin/kbd-dialog-with-search.png)      |
+
+### Student Experience
+
+| Screen        | Preview                                                             |
+| ------------- | ------------------------------------------------------------------- |
+| My Enrollment | ![My Enrollment Page](assets/medias/student/my-enrollment-page.png) |
+| My Profile    | ![My Profile Page](assets/medias/student/my-profile-page.png)       |
+
+For a full visual walkthrough with feature callouts, see the dedicated [Project Showcase](.docs/project-showcase.md).
+
 ---
 
 ## Tech Stack
@@ -126,6 +158,7 @@ All detailed documentation lives in the `.docs/` folder. Each file covers a spec
 | [Data Models](.docs/data-models.md)             | All TypeScript interfaces — entities, params, request/response shapes     |
 | [State Management](.docs/state-management.md)   | React Query setup, query key factories, custom hooks, cache invalidation  |
 | [UI Components](.docs/ui-components.md)         | 48+ component families, shared components, barrel exports                 |
+| [Project Showcase](.docs/project-showcase.md)   | Visual walkthrough of core admin and student flows                        |
 
 ### Features
 
