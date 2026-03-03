@@ -89,10 +89,11 @@ bun run lint
 
 ### Seed Credentials
 
-| Role  | Email           | Password    |
-| ----- | --------------- | ----------- |
-| Admin | `admin@sis.edu` | Admin@12345 |
-| Staff | `staff@sis.edu` | Staff@12345 |
+| Role    | Email             | Password              |
+| ------- | ----------------- | --------------------- |
+| Admin   | `admin@sis.edu`   | Admin@12345           |
+| Staff   | `staff@sis.edu`   | Staff@12345           |
+| Student | `<student-email>` | `<student-birthdate>` |
 
 ---
 
