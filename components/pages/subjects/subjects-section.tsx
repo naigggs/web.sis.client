@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import {
   IconPlus,
@@ -18,6 +18,7 @@ import { useGetSubjects } from "@/hooks/api/subject/use-get-subjects";
 import { useBulkDeleteSubjects } from "@/hooks/api/subject/use-bulk-delete-subjects";
 import { usePatchSubject } from "@/hooks/api/subject/use-patch-subject";
 import { useGetCourses } from "@/hooks/api/course/use-get-courses";
+import { useDebounce } from "@/hooks/use-debounce";
 import { SubjectResponse } from "@/data/interface/subject";
 import {
   Button,
@@ -51,15 +52,6 @@ import {
   AlertDialogAction,
 } from "@/components/ui";
 
-function useDebounce<T>(value: T, delay = 400): T {
-  const [debounced, setDebounced] = React.useState(value);
-  React.useEffect(() => {
-    const id = setTimeout(() => setDebounced(value), delay);
-    return () => clearTimeout(id);
-  }, [value, delay]);
-  return debounced;
-}
-
 interface InlineEdit {
   id: string;
   field: "code" | "title" | "units";
@@ -67,30 +59,66 @@ interface InlineEdit {
 }
 
 export function SubjectsSection() {
-  const [search, setSearch] = React.useState("");
-  const [page, setPage] = React.useState(1);
-  const debouncedSearch = useDebounce(search);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const [selectedIds, setSelectedIds] = React.useState<Set<string>>(new Set());
-  const [selectedCourseIds, setSelectedCourseIds] = React.useState<Set<string>>(
-    new Set(),
+  const currentSearch = searchParams.get("search") ?? "";
+  const page = Number(searchParams.get("page") ?? "1") || 1;
+  const limit = Number(searchParams.get("limit") ?? "20") || 20;
+  const selectedCourseIdList = React.useMemo(
+    () => searchParams.getAll("courseId").filter(Boolean),
+    [searchParams],
+  );
+  const selectedCourseIds = React.useMemo(
+    () => new Set(selectedCourseIdList),
+    [selectedCourseIdList],
   );
 
-  const router = useRouter();
+  const [search, setSearch] = React.useState(currentSearch);
+  const debouncedSearch = useDebounce(search, 400);
+
+  const [selectedIds, setSelectedIds] = React.useState<Set<string>>(new Set());
 
   const [deleteTarget, setDeleteTarget] =
     React.useState<SubjectResponse | null>(null);
   const [bulkDeleteOpen, setBulkDeleteOpen] = React.useState(false);
   const [inlineEdit, setInlineEdit] = React.useState<InlineEdit | null>(null);
 
+  const replaceParams = React.useCallback(
+    (updater: (next: URLSearchParams) => void) => {
+      const next = new URLSearchParams(searchParams.toString());
+      updater(next);
+      const query = next.toString();
+      router.replace(query ? `${pathname}?${query}` : pathname);
+    },
+    [pathname, router, searchParams],
+  );
+
+  React.useEffect(() => {
+    setSearch(currentSearch);
+  }, [currentSearch]);
+
+  React.useEffect(() => {
+    if (debouncedSearch === currentSearch) return;
+
+    replaceParams((next) => {
+      if (debouncedSearch) next.set("search", debouncedSearch);
+      else next.delete("search");
+
+      next.set("page", "1");
+      if (!next.get("limit")) next.set("limit", String(limit));
+    });
+
+    setSelectedIds(new Set());
+  }, [currentSearch, debouncedSearch, limit, replaceParams]);
+
   const { data, isLoading, isFetching } = useGetSubjects({
     page,
-    limit: 20,
+    limit,
     search: debouncedSearch || undefined,
     courseId:
-      selectedCourseIds.size > 0
-        ? Array.from(selectedCourseIds).sort()
-        : undefined,
+      selectedCourseIdList.length > 0 ? selectedCourseIdList : undefined,
   });
   const subjects = data?.subjects ?? [];
   const pagination = data?.pagination;
@@ -102,9 +130,8 @@ export function SubjectsSection() {
   const { mutate: patchSubject } = usePatchSubject();
 
   React.useEffect(() => {
-    setPage(1);
     setSelectedIds(new Set());
-  }, [debouncedSearch, selectedCourseIds]);
+  }, [selectedCourseIdList]);
 
   // ── Selection ──────────────────────────────────────────────────────────────
   const allSelected =
@@ -241,12 +268,21 @@ export function SubjectsSection() {
                       value={`${course.code} ${course.name}`}
                       data-checked={selectedCourseIds.has(course.id)}
                       onSelect={() => {
-                        setSelectedCourseIds((prev) => {
-                          const next = new Set(prev);
-                          next.has(course.id)
-                            ? next.delete(course.id)
-                            : next.add(course.id);
-                          return next;
+                        replaceParams((next) => {
+                          const selected = new Set(next.getAll("courseId"));
+                          if (selected.has(course.id))
+                            selected.delete(course.id);
+                          else selected.add(course.id);
+
+                          next.delete("courseId");
+                          Array.from(selected)
+                            .sort()
+                            .forEach((id) => next.append("courseId", id));
+
+                          next.set("page", "1");
+                          if (!next.get("limit")) {
+                            next.set("limit", String(limit));
+                          }
                         });
                       }}
                     >
@@ -264,7 +300,15 @@ export function SubjectsSection() {
                 <DropdownMenuSeparator />
                 <button
                   className="flex w-full items-center gap-1.5 px-3 py-2 text-xs text-muted-foreground hover:text-foreground"
-                  onClick={() => setSelectedCourseIds(new Set())}
+                  onClick={() => {
+                    replaceParams((next) => {
+                      next.delete("courseId");
+                      next.set("page", "1");
+                      if (!next.get("limit")) {
+                        next.set("limit", String(limit));
+                      }
+                    });
+                  }}
                 >
                   <IconX className="h-3 w-3" />
                   Clear filter
@@ -498,7 +542,12 @@ export function SubjectsSection() {
               size="sm"
               variant="outline"
               disabled={!pagination.hasPrevPage}
-              onClick={() => setPage((p) => p - 1)}
+              onClick={() => {
+                replaceParams((next) => {
+                  next.set("page", String(Math.max(1, page - 1)));
+                  if (!next.get("limit")) next.set("limit", String(limit));
+                });
+              }}
             >
               Previous
             </Button>
@@ -509,7 +558,12 @@ export function SubjectsSection() {
               size="sm"
               variant="outline"
               disabled={!pagination.hasNextPage}
-              onClick={() => setPage((p) => p + 1)}
+              onClick={() => {
+                replaceParams((next) => {
+                  next.set("page", String(page + 1));
+                  if (!next.get("limit")) next.set("limit", String(limit));
+                });
+              }}
             >
               Next
             </Button>

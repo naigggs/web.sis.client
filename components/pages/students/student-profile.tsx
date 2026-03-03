@@ -80,6 +80,9 @@ export function StudentProfile({ studentId }: Props) {
           <GradeRecordsCard
             grades={student?.grades ?? []}
             isLoading={isLoading}
+            studentName={
+              student ? `${student.firstName} ${student.lastName}` : undefined
+            }
           />
           <ReservationsCard
             reservations={student?.reservations ?? []}

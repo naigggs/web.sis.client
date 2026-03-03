@@ -1,16 +1,20 @@
 "use client";
 
 import * as React from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { IconLoader2, IconFilter } from "@tabler/icons-react";
+import { IconLoader2, IconFilter, IconHistory } from "@tabler/icons-react";
 
 import { useGetEnrolledStudents } from "@/hooks/api/subject/use-get-enrolled-students";
 import { useCreateGrade } from "@/hooks/api/grade/use-create-grade";
 import { usePatchGrade } from "@/hooks/api/grade/use-patch-grade";
 import { useGetCourses } from "@/hooks/api/course/use-get-courses";
 import { useGetSubjects } from "@/hooks/api/subject/use-get-subjects";
+import { GradeResponse } from "@/data/interface/grade";
+import { subjectKeys } from "@/hooks/api/subject/subject-keys";
 import { EnrolledStudentResponse } from "@/data/interface/subject";
 import {
+  Button,
   Input,
   Table,
   TableHeader,
@@ -30,6 +34,7 @@ import {
   GradeValue,
   GradeRemarksBadge,
 } from "@/components/pages/students/_profile/profile-helpers";
+import { GradeHistorySheet } from "./grade-history-sheet";
 
 // ─── Inline-edit state ────────────────────────────────────────────────────────
 interface InlineEdit {
@@ -40,10 +45,17 @@ interface InlineEdit {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export function GradingSection() {
+  const queryClient = useQueryClient();
   const [selectedCourseId, setSelectedCourseId] = React.useState("");
   const [selectedSubjectId, setSelectedSubjectId] = React.useState("");
 
   const [inlineEdit, setInlineEdit] = React.useState<InlineEdit | null>(null);
+  const [historyTarget, setHistoryTarget] = React.useState<{
+    studentId: string;
+    subjectId: string;
+    courseId: string;
+    studentName: string;
+  } | null>(null);
 
   // ── Data ───────────────────────────────────────────────────────────────────
   const { data: coursesData, isLoading: isLoadingCourses } = useGetCourses();
@@ -81,6 +93,38 @@ export function GradingSection() {
     setInlineEdit({ studentId, field, value: currentValue ?? "" });
   };
 
+  const syncEnrolledStudentsCache = React.useCallback(
+    (updatedGrade: GradeResponse) => {
+      queryClient.setQueryData<EnrolledStudentResponse[]>(
+        subjectKeys.enrolledStudents(updatedGrade.subjectId),
+        (previous) => {
+          if (!previous) return previous;
+
+          return previous.map((student) => {
+            if (student.id !== updatedGrade.studentId) return student;
+
+            return {
+              ...student,
+              grade: {
+                id: updatedGrade.id,
+                prelim: updatedGrade.prelim,
+                midterm: updatedGrade.midterm,
+                finals: updatedGrade.finals,
+                finalGrade: updatedGrade.finalGrade,
+                remarks: updatedGrade.remarks,
+              },
+            };
+          });
+        },
+      );
+
+      queryClient.invalidateQueries({
+        queryKey: subjectKeys.enrolledStudents(updatedGrade.subjectId),
+      });
+    },
+    [queryClient],
+  );
+
   const commitEdit = () => {
     if (!inlineEdit || !selectedSubjectId || !selectedCourseId) return;
 
@@ -95,7 +139,10 @@ export function GradingSection() {
       patchGrade(
         { id: existingGrade.id, payload },
         {
-          onSuccess: () => toast.success("Grade updated"),
+          onSuccess: (updatedGrade) => {
+            syncEnrolledStudentsCache(updatedGrade);
+            toast.success("Grade updated");
+          },
           onError: () => toast.error("Failed to update grade"),
         },
       );
@@ -109,7 +156,10 @@ export function GradingSection() {
           ...payload,
         },
         {
-          onSuccess: () => toast.success("Grade saved"),
+          onSuccess: (updatedGrade) => {
+            syncEnrolledStudentsCache(updatedGrade);
+            toast.success("Grade saved");
+          },
           onError: () => toast.error("Failed to save grade"),
         },
       );
@@ -268,6 +318,7 @@ export function GradingSection() {
                 </TableHead>
                 <TableHead className="text-center w-28">Final Grade</TableHead>
                 <TableHead className="text-center pr-4 w-24">Remarks</TableHead>
+                <TableHead className="text-center pr-4 w-14">History</TableHead>
               </TableRow>
             </TableHeader>
 
@@ -275,7 +326,7 @@ export function GradingSection() {
               {isTableLoading ? (
                 Array.from({ length: 8 }).map((_, i) => (
                   <TableRow key={i}>
-                    {Array.from({ length: 8 }).map((_, j) => (
+                    {Array.from({ length: 9 }).map((_, j) => (
                       <TableCell key={j}>
                         <Skeleton className="h-4 w-full" />
                       </TableCell>
@@ -285,7 +336,7 @@ export function GradingSection() {
               ) : enrolledStudents.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={8}
+                    colSpan={9}
                     className="py-16 text-center text-muted-foreground"
                   >
                     No students enrolled in this subject.
@@ -396,6 +447,23 @@ export function GradingSection() {
                       <TableCell className="text-center pr-4">
                         <GradeRemarksBadge remarks={grade?.remarks ?? null} />
                       </TableCell>
+                      <TableCell className="text-center pr-4">
+                        <Button
+                          size="icon-sm"
+                          variant="ghost"
+                          onClick={() =>
+                            setHistoryTarget({
+                              studentId: row.id,
+                              subjectId: selectedSubjectId,
+                              courseId: selectedCourseId,
+                              studentName: `${row.firstName} ${row.lastName}`,
+                            })
+                          }
+                          aria-label="View grade history"
+                        >
+                          <IconHistory className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   );
                 })
@@ -409,6 +477,19 @@ export function GradingSection() {
         <div className="rounded-2xl border border-dashed flex items-center justify-center py-24 text-muted-foreground text-sm">
           Select a course and subject to load the grading sheet.
         </div>
+      )}
+
+      {historyTarget && (
+        <GradeHistorySheet
+          open={!!historyTarget}
+          onOpenChange={(open) => {
+            if (!open) setHistoryTarget(null);
+          }}
+          studentId={historyTarget.studentId}
+          subjectId={historyTarget.subjectId}
+          courseId={historyTarget.courseId}
+          studentName={historyTarget.studentName}
+        />
       )}
     </div>
   );

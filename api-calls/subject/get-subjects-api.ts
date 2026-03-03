@@ -15,13 +15,7 @@ export async function getSubjectsApi(
   if (params.search) searchParams.set("search", params.search);
   const courseIds = params.courseId ?? params.course;
   if (Array.isArray(courseIds)) {
-    if (courseIds.length === 1) {
-      searchParams.set("courseId", courseIds[0]);
-    } else if (courseIds.length > 1) {
-      courseIds.forEach((courseId) =>
-        searchParams.append("courseId[]", courseId),
-      );
-    }
+    courseIds.forEach((courseId) => searchParams.append("courseId", courseId));
   } else if (courseIds) {
     searchParams.set("courseId", courseIds);
   }

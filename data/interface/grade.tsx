@@ -46,3 +46,32 @@ export interface PatchGradeRequest {
   midterm?: number;
   finals?: number;
 }
+
+export type GradeAuditAction = "CREATED" | "UPDATED";
+
+export interface GradeAuditLog {
+  id: string;
+  gradeId: string;
+  action: GradeAuditAction;
+  prelim: string | null;
+  midterm: string | null;
+  finals: string | null;
+  finalGrade: string | null;
+  remarks: "PASSED" | "FAILED" | null;
+  createdAt: string;
+  performedBy: {
+    id: string;
+    email: string;
+    role: "admin" | "staff" | "student";
+  };
+}
+
+export interface GetGradeHistoryParams {
+  studentId: string;
+  subjectId: string;
+  courseId: string;
+}
+
+export interface GetGradeHistoryData {
+  history: GradeAuditLog[];
+}
